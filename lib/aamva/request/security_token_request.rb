@@ -8,7 +8,7 @@ require 'xmldsig'
 module Aamva
   module Request
     class SecurityTokenRequest < HTTPI::Request
-      AUTH_URL = 'https://authentication-cert.aamva.org/Authentication/Authenticate.svc'.freeze
+      DEFAULT_AUTH_URL = 'https://authentication-cert.aamva.org/Authentication/Authenticate.svc'.freeze
       CONTENT_TYPE = 'application/soap+xml;charset=UTF-8'.freeze
       SOAP_ACTION =
         '"http://aamva.org/authentication/3.1.0/IAuthenticationService/Authenticate"'.freeze
@@ -21,6 +21,10 @@ module Aamva
 
       def nonce
         @nonce ||= SecureRandom.base64(32)
+      end
+
+      def self.auth_url
+        ENV.fetch('AUTH_URL', DEFAULT_AUTH_URL)
       end
 
       private

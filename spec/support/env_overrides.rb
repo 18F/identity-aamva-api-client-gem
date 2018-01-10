@@ -11,5 +11,7 @@ module EnvOverrides
     ENV['AAMVA_PRIVATE_KEY_PASSPHRASE'] = 'sekret'
     ENV['AAMVA_VERIFICATION_URL'] =
       'https://verificationservices-primary.aamva.org:18449/dldv/2.1/valuefree'
+    ENV['AUTH_URL'] =
+      'https://authentication-cert.aamva.org/Authentication/Authenticate.svc'
   end
 end
