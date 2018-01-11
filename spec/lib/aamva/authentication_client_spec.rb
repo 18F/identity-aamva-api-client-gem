@@ -38,6 +38,11 @@ describe Aamva::AuthenticationClient do
     end
 
     context 'when the auth token is nil' do
+      before do
+        Aamva::AuthenticationClient.auth_token = nil
+        Aamva::AuthenticationClient.auth_token_expiration = nil
+      end
+
       it 'should send an authentication request then save and return the token' do
         token = subject.fetch_token
 

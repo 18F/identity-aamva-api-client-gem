@@ -4,9 +4,6 @@ $LOAD_PATH.unshift File.dirname(__FILE__) + '/../lib'
 require 'pry-byebug'
 require 'dotenv'
 
-require File.dirname(__FILE__) + '/support/env_overrides.rb'
-EnvOverrides.set_test_environment_variables
-
 require 'aamva'
 require 'proofer/vendor/aamva'
 require 'proofer'
@@ -16,6 +13,8 @@ require 'httpi'
 HTTPI.log = false
 
 Dir[File.dirname(__FILE__) + '/support/*.rb'].sort.each { |file| require file }
+
+EnvOverrides.set_test_environment_variables
 
 RSpec.configure do |config|
   config.color = true
