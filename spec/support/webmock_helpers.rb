@@ -10,14 +10,14 @@ module WebMockHelpers
   end
 
   def stub_authentication_token_request
-    url = Aamva::Request::AuthenticationTokenRequest::AUTH_URL
+    url = Aamva::Request::AuthenticationTokenRequest.auth_url
     stub_request(:post, url).
       with(body: Fixtures.authentication_token_request).
       to_return(body: Fixtures.authentication_token_response, status: 200)
   end
 
   def stub_security_token_request
-    url = Aamva::Request::SecurityTokenRequest::AUTH_URL
+    url = Aamva::Request::SecurityTokenRequest.auth_url
     stub_request(:post, url).
       with(body: Fixtures.security_token_request).
       to_return(body: Fixtures.security_token_response, status: 200)

@@ -16,7 +16,7 @@ module Aamva
       def initialize
         self.body = build_request_body
         self.headers = build_request_headers
-        self.url = AUTH_URL
+        self.url = SecurityTokenRequest.auth_url
       end
 
       def nonce

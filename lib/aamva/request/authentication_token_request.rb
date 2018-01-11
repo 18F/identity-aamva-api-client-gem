@@ -27,7 +27,7 @@ module Aamva
         self.hmac_secret = HmacSecret.new(client_hmac_secret, server_hmac_secret).psha1
         self.body = build_request_body
         self.headers = build_request_headers
-        self.url = AUTH_URL
+        self.url = AuthenticationTokenRequest.auth_url
       end
 
       def self.auth_url
