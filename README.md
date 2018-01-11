@@ -38,8 +38,8 @@ To run the integration tests:
 
 - Download the file named "DLDV Structured Test Plan.xlsx" from Google Drive.
   Export it as a CSV and save the results
-- Save the AAMVA public and private keys and set the `AAMVA_PRIVATE_KEY_PATH`,
-  `AAMVA_PRIVATE_KEY_PASSPHRASE`, and `AAMVA_PUBLIC_KEY_PATH` appropriately in
+- Save the AAMVA public and private keys and set the `AAMVA_PRIVATE_KEY`, and
+  `AAMVA_PUBLIC_KEY` appropriately in
   a `.env` file.
 - Set `AAMVA_VERIFICATION_URL` to the AAMVA API url you wish to test in the
   `.env` file
@@ -51,9 +51,8 @@ To run the integration tests:
 This application uses the following environment variables:
 
 ```shell
-AAMVA_PRIVATE_KEY_PATH='/path/to/aamva-private-key.pem'
-AAMVA_PRIVATE_KEY_PASSPHRASE='sekret'
-AAMVA_PUBLIC_KEY_PATH='/path/to/aamva-public-key.crt'
+AAMVA_PRIVATE_KEY='base64privatekey'
+AAMVA_PUBLIC_KEY='base64publickey'
 AAMVA_VERIFICATION_URL='https://verificationservices-primary.aamva.org:18449/dldv/2.1/valuefree'
 AUTH_URL= 'https://authentication-cert.aamva.org/Authentication/Authenticate.svc'
 ```

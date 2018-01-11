@@ -74,13 +74,14 @@ module Aamva
 
       def private_key
         @private_key ||= OpenSSL::PKey::RSA.new(
-          File.read(ENV['AAMVA_PRIVATE_KEY_PATH']),
-          ENV['AAMVA_PRIVATE_KEY_PASSPHRASE']
+          Base64.decode64(ENV['AAMVA_PRIVATE_KEY'])
         )
       end
 
       def public_key
-        @public_key ||= OpenSSL::X509::Certificate.new(File.read(ENV['AAMVA_PUBLIC_KEY_PATH']))
+        @public_key ||= OpenSSL::X509::Certificate.new(
+          Base64.decode64(ENV['AAMVA_PUBLIC_KEY'])
+        )
       end
 
       def reply_to_uuid
