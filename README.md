@@ -43,6 +43,7 @@ To run the integration tests:
   a `.env` file.
 - Set `AAMVA_VERIFICATION_URL` to the AAMVA API url you wish to test in the
   `.env` file
+- Set `AUTH_URL` to the auth  url you wish to test in the `.env` file
 - Run `rspec spec/integration/`
 
 # Environment variables
@@ -54,4 +55,5 @@ AAMVA_PRIVATE_KEY_PATH='/path/to/aamva-private-key.pem'
 AAMVA_PRIVATE_KEY_PASSPHRASE='sekret'
 AAMVA_PUBLIC_KEY_PATH='/path/to/aamva-public-key.crt'
 AAMVA_VERIFICATION_URL='https://verificationservices-primary.aamva.org:18449/dldv/2.1/valuefree'
+AUTH_URL= 'https://authentication-cert.aamva.org/Authentication/Authenticate.svc'
 ```
