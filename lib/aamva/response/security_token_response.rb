@@ -14,9 +14,12 @@ module Aamva
       end
 
       def nonce
-        # TODO Shared rexml document
         document = REXML::Document.new(http_response.body)
-        REXML::XPath.first(document, '//t:BinarySecret').text
+        REXML::XPath.first(
+          document,
+          '//trust:BinarySecret',
+          'trust' => 'http://schemas.xmlsoap.org/ws/2005/02/trust'
+        ).text
       end
 
       private
@@ -42,16 +45,23 @@ module Aamva
       end
 
       def parse_response
-        document = REXML::Document.new(http_response.body)
-        security_context_token_node = REXML::XPath.first(
-          document,
-          # TODO Add namespace matching
-          '//t:RequestSecurityTokenResponse/t:RequestedSecurityToken/c:SecurityContextToken'
-        )
         handle_missing_token_error(security_context_token_node)
-        token_id_node = REXML::XPath.first(security_context_token_node, '//c:Identifier')
+        token_id_node = REXML::XPath.first(
+          security_context_token_node,
+          '//sc:Identifier',
+          'sc' => 'http://schemas.xmlsoap.org/ws/2005/02/sc'
+        )
         self.security_context_token_identifier = token_id_node.text
         self.security_context_token_reference = security_context_token_node.attributes['Id']
+      end
+
+      def security_context_token_node
+        @security_context_token_node ||= REXML::XPath.first(
+          REXML::Document.new(http_response.body),
+          '//tr:RequestSecurityTokenResponse/tr:RequestedSecurityToken/sc:SecurityContextToken',
+          'tr' => 'http://schemas.xmlsoap.org/ws/2005/02/trust',
+          'sc' => 'http://schemas.xmlsoap.org/ws/2005/02/sc'
+        )
       end
     end
   end
