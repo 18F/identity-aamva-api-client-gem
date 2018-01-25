@@ -2,6 +2,7 @@ require 'base64'
 
 module EnvOverrides
   def self.set_test_environment_variables
+    ENV['AAMVA_CERT_ENABLED'] = 'false'
     ENV['AAMVA_PRIVATE_KEY'] = Base64.strict_encode64 Fixtures.aamva_private_key.to_der
     ENV['AAMVA_PUBLIC_KEY'] = Base64.strict_encode64 Fixtures.aamva_public_key.to_der
     ENV['AAMVA_VERIFICATION_URL'] =

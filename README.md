@@ -44,6 +44,7 @@ To run the integration tests:
 - Set `AAMVA_VERIFICATION_URL` to the AAMVA API url you wish to test in the
   `.env` file
 - Set `AUTH_URL` to the auth  url you wish to test in the `.env` file
+- Set 'AAMVA_CERT_ENABLED' if you are using test data for the AAMVA cert environment
 - Run `rspec spec/integration/`
 
 # Environment variables
