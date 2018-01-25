@@ -14,7 +14,7 @@
               1234-abcd-efgh
             </ns1:TransactionLocatorId>
             <ns1:MessageOriginatorId>GSA</ns1:MessageOriginatorId>
-            <ns1:MessageDestinationId>P6</ns1:MessageDestinationId>
+            <ns1:MessageDestinationId>CA</ns1:MessageDestinationId>
           </ns1:MessageAddress>
         </ns1:ControlData>
         <ns2:DriverLicenseIdentification>

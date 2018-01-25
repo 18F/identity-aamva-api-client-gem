@@ -55,7 +55,8 @@ module Aamva
       end
 
       def message_destination_id
-        'P6' # TODO State or test destination
+        return 'P6' if ENV['AAMVA_CERT_ENABLED'] == 'true'
+        applicant.state_id_data.state_id_jurisdiction
       end
 
       def request_body_template
