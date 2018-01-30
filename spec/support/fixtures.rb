@@ -41,6 +41,13 @@ module Fixtures
     read_fixture_file('responses/soap_fault_response.xml')
   end
 
+  def self.soap_fault_response_simplified
+    XmlHelpers.delete_xml_at_xpath(
+      soap_fault_response,
+      '//ProgramExceptions'
+    )
+  end
+
   def self.verification_request
     read_fixture_file('requests/verification_request.xml').
       gsub(/^\s+/, '').

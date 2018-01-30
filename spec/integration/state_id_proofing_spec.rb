@@ -20,10 +20,14 @@ describe 'State ID proofing' do
       agent = Proofer::Agent.new(vendor: :aamva, applicant: applicant)
 
       if row['MVA Timeout'] == 'TRUE'
-        expect { agent.submit_state_id(state_id_data(row)) }.to raise_error(
-          Aamva::VerificationError,
-          'DLDV VSS'
-        )
+        error = begin
+          agent.submit_state_id(state_id_data(row))
+        rescue Aamva::VerificationError => e
+          e
+        end
+
+        expect(error).to be_kind_of(Aamva::VerificationError)
+        expect(error.message).to include('MVA did not respond in a timely fashion')
       else
         response = agent.submit_state_id(state_id_data(row))
         expect(response.success?).to eq(true)

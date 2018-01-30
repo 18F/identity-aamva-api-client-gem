@@ -26,6 +26,31 @@ describe Aamva::SoapErrorHander do
     end
 
     context 'when there is an error' do
+      it 'contains relevant parts of the error message' do
+        expect(subject.error_message).to include('A FooBar error occurred')
+
+        expect(subject.error_message).to include('ExceptionId: 0047')
+        expect(subject.error_message).to include(
+          'ExceptionText: MVA did not respond in a timely fashion'
+        )
+        expect(subject.error_message).to include('ExceptionTypeCode: I')
+
+        expect(subject.error_message).to include('ExceptionId: 0048')
+        expect(subject.error_message).to include(
+          'Servers are experiencing higher than regular traffic'
+        )
+        expect(subject.error_message).to include('ExceptionTypeCode: J')
+      end
+    end
+
+    context 'when there is an error without a ProgramException section' do
+      let(:response_body) do
+        delete_xml_at_xpath(
+          Fixtures.soap_fault_response,
+          '//ProgramExceptions'
+        )
+      end
+
       it { expect(subject.error_message).to eq('A FooBar error occurred') }
     end
 
@@ -37,7 +62,7 @@ describe Aamva::SoapErrorHander do
         )
       end
 
-      it { expect(subject.error_message).to eq('A SOAP error occurred') }
+      it { expect(subject.error_message).to include('A SOAP error occurred') }
     end
   end
 end

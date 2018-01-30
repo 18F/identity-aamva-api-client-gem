@@ -23,6 +23,13 @@
             <ExceptionFatalIndicatorCode>true</ExceptionFatalIndicatorCode>
             <ExceptionActorText>DLDV VSS</ExceptionActorText>
           </ProgramException>
+          <ProgramException>
+            <ExceptionId>0048</ExceptionId>
+            <ExceptionText>Servers are experiencing higher than regular traffic</ExceptionText>
+            <ExceptionTypeCode>J</ExceptionTypeCode>
+            <ExceptionFatalIndicatorCode>true</ExceptionFatalIndicatorCode>
+            <ExceptionActorText>DLDV VSS</ExceptionActorText>
+          </ProgramException>
         </ProgramExceptions>
       </Exception>
     </s:Fault>
