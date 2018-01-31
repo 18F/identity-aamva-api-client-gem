@@ -19,4 +19,5 @@ module XmlHelpers
     element.parent.delete(element)
     document.to_s
   end
+  module_function :delete_xml_at_xpath
 end

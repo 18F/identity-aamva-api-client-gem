@@ -22,7 +22,7 @@ describe Aamva::Response::AuthenticationTokenResponse do
     end
 
     context 'when the API response has an error' do
-      let(:response_body) { Fixtures.soap_fault_response }
+      let(:response_body) { Fixtures.soap_fault_response_simplified }
 
       it 'raises an AuthenticationError' do
         expect { subject }.to raise_error(
