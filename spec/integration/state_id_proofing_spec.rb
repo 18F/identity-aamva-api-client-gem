@@ -1,4 +1,5 @@
 require 'csv'
+require 'set'
 
 describe 'State ID proofing' do
   before do
@@ -19,18 +20,25 @@ describe 'State ID proofing' do
 
       agent = Proofer::Agent.new(vendor: :aamva, applicant: applicant)
 
-      if row['MVA Timeout'] == 'TRUE'
-        error = begin
-          agent.submit_state_id(state_id_data(row))
-        rescue Aamva::VerificationError => e
-          e
-        end
+      response = begin
+        agent.submit_state_id(state_id_data(row))
+      rescue Aamva::VerificationError => e
+        raise e unless row['Result'] == 'ERROR'
+        e
+      end
 
-        expect(error).to be_kind_of(Aamva::VerificationError)
-        expect(error.message).to include('MVA did not respond in a timely fashion')
-      else
-        response = agent.submit_state_id(state_id_data(row))
+      if row['Result'] == 'VERIFIED'
         expect(response.success?).to eq(true)
+      elsif row['Result'] == 'UNVERIFIED'
+        expect(response.success?).to eq(false)
+        error_attributes = response.errors.keys.map(&:to_s)
+        expected_error_attributes = row['Unverified Attrs'].split(',')
+        expect(Set.new(error_attributes)).to eq(Set.new(expected_error_attributes))
+      elsif row['Result'] == 'ERROR'
+        expect(response).to be_a(Aamva::VerificationError)
+        expect(response.message).to include(row['Error Message'])
+      else
+        raise "Unknown result type: #{row['Result']}"
       end
     end
   end
@@ -45,7 +53,7 @@ describe 'State ID proofing' do
   end
 
   def address_data(row)
-    address_elements = (row['Resident address'] || row['Mailing address']).split('@')
+    address_elements = row['Address'].split('@')
     {
       address1: address_elements[0],
       address2: address_elements[1],
