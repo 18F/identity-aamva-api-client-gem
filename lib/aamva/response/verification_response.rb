@@ -18,6 +18,7 @@ module Aamva
 
       REQUIRED_VERIFICATION_ATTRIBUTES = %i[
         state_id_number
+        state_id_type
         dob
         last_name
         first_name
