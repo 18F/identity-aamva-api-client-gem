@@ -73,5 +73,19 @@ describe Proofer::Vendor::Aamva do
         expect(response.errors).to eq(dob: 'UNVERIFIED', zipcode: 'UNVERIFIED')
       end
     end
+
+    context 'when verification attributes are missing' do
+      let(:success) { false }
+      let(:verification_results) { super().merge(dob: false, zipcode: nil) }
+
+      it 'should return a failed confirmation' do
+        response = subject.submit_state_id(state_id_data, session_id)
+
+        expect(response).to be_a(Proofer::Confirmation)
+        expect(response.success?).to eq(false)
+        expect(response.vendor_resp).to eq(aamva_response)
+        expect(response.errors).to eq(dob: 'UNVERIFIED', zipcode: 'MISSING')
+      end
+    end
   end
 end

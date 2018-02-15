@@ -45,26 +45,6 @@ describe Aamva::Response::VerificationResponse do
         )
       end
     end
-
-    context 'when the API response is missing verification attributes' do
-      let(:response_body) do
-        body = delete_match_indicator(
-          Fixtures.verification_response,
-          'PersonBirthDateMatchIndicator'
-        )
-        delete_match_indicator(
-          body,
-          'AddressZIP5MatchIndicator'
-        )
-      end
-
-      it 'raises a VerificationError' do
-        expect { subject }.to raise_error(
-          Aamva::VerificationError,
-          'Response is missing attributes: dob, zipcode'
-        )
-      end
-    end
   end
 
   describe '#reasons' do
@@ -90,15 +70,19 @@ describe Aamva::Response::VerificationResponse do
 
     context 'when required attributes are not verified' do
       let(:response_body) do
-        modify_match_indicator(
+        body = modify_match_indicator(
           Fixtures.verification_response,
           'PersonBirthDateMatchIndicator',
           'false'
         )
+        delete_match_indicator(
+          body,
+          'AddressZIP5MatchIndicator'
+        )
       end
 
       it 'returns an array with the reasons verifiation failed' do
-        expect(subject.reasons).to eq(['Failed to verify dob'])
+        expect(subject.reasons).to eq(['Failed to verify dob', 'Response was missing zipcode'])
       end
     end
   end
@@ -131,6 +115,17 @@ describe Aamva::Response::VerificationResponse do
 
       it { expect(subject.success?).to eq(false) }
     end
+
+    context 'when required attributes are missing' do
+      let(:response_body) do
+        delete_match_indicator(
+          Fixtures.verification_response,
+          'PersonBirthDateMatchIndicator'
+        )
+      end
+
+      it { expect(subject.success?).to eq(false) }
+    end
   end
 
   describe '#verification_results' do
@@ -142,15 +137,19 @@ describe Aamva::Response::VerificationResponse do
 
     context 'when not all attributes are verified' do
       let(:response_body) do
-        modify_match_indicator(
+        body = modify_match_indicator(
           Fixtures.verification_response,
           'PersonBirthDateMatchIndicator',
           'false'
         )
+        delete_match_indicator(
+          body,
+          'AddressZIP5MatchIndicator'
+        )
       end
 
       it 'returns a hash of values that were verified and values that were not' do
-        expected_result = verification_results.merge(dob: false)
+        expected_result = verification_results.merge(dob: false, zipcode: nil)
 
         expect(subject.verification_results).to eq(expected_result)
       end

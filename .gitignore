@@ -7,4 +7,5 @@ tmp/
 *.crt
 *.PFX
 fixtures/aamva_test_data.csv
+fixtures/*_test_data.csv
 .overcommit.yml

@@ -19,7 +19,8 @@ module Proofer
       def build_state_id_error(response)
         errors = {}
         response.verification_results.each do |attribute, result|
-          errors[attribute] = 'UNVERIFIED' unless result == true
+          errors[attribute] = 'UNVERIFIED' if result == false
+          errors[attribute] = 'MISSING' if result.nil?
         end
         errors
       end
