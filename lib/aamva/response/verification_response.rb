@@ -18,7 +18,6 @@ module Aamva
 
       REQUIRED_VERIFICATION_ATTRIBUTES = %i[
         state_id_number
-        state_id_type
         dob
         last_name
         first_name
@@ -37,13 +36,17 @@ module Aamva
         handle_soap_error
         handle_http_error
         parse_response
-        handle_missing_attributes_error
       end
 
       def reasons
         REQUIRED_VERIFICATION_ATTRIBUTES.map do |verification_attribute|
-          next if verification_results[verification_attribute]
-          "Failed to verify #{verification_attribute}"
+          verification_result = verification_results[verification_attribute]
+          case verification_result
+          when false
+            "Failed to verify #{verification_attribute}"
+          when nil
+            "Response was missing #{verification_attribute}"
+          end
         end.compact
       end
 
@@ -64,10 +67,9 @@ module Aamva
         raise VerificationError, "Unexpected status code in response: #{status}"
       end
 
-      def handle_missing_attributes_error
-        return if missing_attributes.empty?
-        missing_attribute_names = missing_attributes.join(', ')
-        raise VerificationError, "Response is missing attributes: #{missing_attribute_names}"
+      def handle_missing_attribute(attribute_name)
+        missing_attributes.push(attribute_name)
+        verification_results[attribute_name] = nil
       end
 
       def handle_soap_error
@@ -84,7 +86,7 @@ module Aamva
         VERIFICATION_ATTRIBUTES_MAP.each_pair do |match_indicator_name, attribute_name|
           attribute_node = node_for_match_indicator(match_indicator_name)
           if attribute_node.nil?
-            missing_attributes.push(attribute_name)
+            handle_missing_attribute(attribute_name)
           elsif attribute_node.text == 'true'
             verification_results[attribute_name] = true
           else
