@@ -1,5 +1,4 @@
 require 'ostruct'
-require 'proofer/v2/base'
 
 module Aamva
   class Proofer < Proofer::Base
@@ -13,7 +12,6 @@ module Aamva
                :state,
                :zipcode,
                :state_id_number,
-               :state_id_jurisdiction,
                :state_id_type
 
     stage :state_id

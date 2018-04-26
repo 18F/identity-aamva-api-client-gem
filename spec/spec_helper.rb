@@ -4,11 +4,9 @@ $LOAD_PATH.unshift File.dirname(__FILE__) + '/../lib'
 require 'pry-byebug'
 require 'dotenv'
 
-require 'aamva'
-require 'aamva/proofer'
-require 'proofer/vendor/aamva'
 require 'proofer'
 require 'httpi'
+require 'aamva'
 
 # We don't want to see HTTPI logs in rspec output
 HTTPI.log = false
