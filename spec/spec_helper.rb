@@ -5,6 +5,7 @@ require 'pry-byebug'
 require 'dotenv'
 
 require 'aamva'
+require 'aamva/proofer'
 require 'proofer/vendor/aamva'
 require 'proofer'
 require 'httpi'
