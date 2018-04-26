@@ -25,8 +25,8 @@ module Aamva
       response = Aamva::VerificationClient.new.send_verification_request(applicant: aamva_applicant)
       unless response.success?
         response.verification_results.each do |attribute, v_result|
-          result.add_error("#{attribute}: UNVERIFIED") if v_result == false
-          result.add_error("#{attribute}: MISSING") if v_result.nil?
+          result.add_error(attribute.to_sym, 'UNVERIFIED') if v_result == false
+          result.add_error(attribute.to_sym, 'MISSING') if v_result.nil?
         end
       end
     end
