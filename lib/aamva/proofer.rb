@@ -9,12 +9,12 @@ module Aamva
                :last_name,
                :dob,
                :address1,
-               :address2,
                :city,
                :state,
                :zipcode,
                :state_id_number,
-               :state_id_type
+               :state_id_type,
+               :state_id_jurisdiction
 
     stage :state_id
 
