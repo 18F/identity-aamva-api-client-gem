@@ -4,7 +4,7 @@ ruby '2.3.3'
 
 gemspec
 
-gem 'proofer', git: 'git@github.com:18F/identity-proofer-gem', tag: 'v2.3.0'
+gem 'proofer', git: 'git@github.com:18F/identity-proofer-gem', tag: 'v2.5.0'
 
 group :development, :test do
   gem 'rubocop'
