@@ -2,7 +2,7 @@ require 'ostruct'
 
 module Aamva
   class Proofer < Proofer::Base
-    name 'aamva:state_id'
+    vendor_name 'aamva:state_id'
 
     attributes :uuid,
                :first_name,
