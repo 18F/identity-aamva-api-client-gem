@@ -1,7 +1,7 @@
 module Aamva
-  module Util
+  module Env
     class << self
-      def fetch_env(key, *default)
+      def fetch(key, *default)
         env.fetch(key.downcase, *default)
       end
 

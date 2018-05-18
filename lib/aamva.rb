@@ -1,4 +1,4 @@
-require 'aamva/util'
+require 'aamva/env'
 require 'aamva/applicant'
 require 'aamva/authentication_client'
 require 'aamva/errors'
