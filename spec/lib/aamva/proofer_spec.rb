@@ -40,16 +40,16 @@ describe Aamva::Proofer do
     described_class.new
   end
 
-  describe '#aamva_proof' do
-    before do
-      allow(Aamva::VerificationClient).to receive(:new).and_return(verification_client)
-      allow(verification_client).to receive(:send_verification_request).with(
-        applicant: aamva_applicant
-      ).and_return(aamva_response)
-      allow(aamva_response).to receive(:success?).and_return(success)
-      allow(aamva_response).to receive(:verification_results).and_return(verification_results)
-    end
+  before do
+    allow(Aamva::VerificationClient).to receive(:new).and_return(verification_client)
+    allow(verification_client).to receive(:send_verification_request).with(
+      applicant: aamva_applicant
+    ).and_return(aamva_response)
+    allow(aamva_response).to receive(:success?).and_return(success)
+    allow(aamva_response).to receive(:verification_results).and_return(verification_results)
+  end
 
+  describe '#aamva_proof' do
     context 'when verification is successful' do
       it 'the result be successful' do
         subject.aamva_proof(state_id_data, result)
@@ -80,6 +80,35 @@ describe Aamva::Proofer do
 
         expect(result.failed?).to eq(true)
         expect(result.errors).to eq({ dob: ['UNVERIFIED'], zipcode: ['MISSING'] })
+      end
+    end
+  end
+
+  describe '#proof' do
+    context 'when verification is successful' do
+      let(:applicant_data) do
+        {
+          uuid: SecureRandom.hex(32),
+          dob: '19800101',
+          last_name: 'Simpson',
+          first_name: 'Homer',
+          address1: '123 Street St',
+          city: 'Springfield',
+          state: 'IL',
+          zipcode: '12345',
+        }
+      end
+
+      let(:aamva_applicant) do
+        Aamva::Applicant.from_proofer_applicant(
+          OpenStruct.new(state_id_data.merge(applicant_data))
+        )
+      end
+
+      it 'the result be successful' do
+        result = subject.proof(state_id_data.merge(applicant_data))
+        expect(result.success?).to eq(true)
+        expect(result.errors).to be_empty
       end
     end
   end
