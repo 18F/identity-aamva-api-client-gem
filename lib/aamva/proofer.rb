@@ -18,9 +18,7 @@ module Aamva
 
     stage :state_id
 
-    proof do |applicant, result|
-      aamva_proof(applicant, result)
-    end
+    proof :aamva_proof
 
     def aamva_proof(applicant, result)
       aamva_applicant = Aamva::Applicant.from_proofer_applicant(OpenStruct.new(applicant))

@@ -16,33 +16,6 @@ describe 'State ID proofing' do
 
   CSV.parse(Fixtures.aamva_test_data, headers: true).each do |row|
     it "should proof for row #{row['#']}" do
-      applicant = Proofer::Applicant.new(applicant_data(row))
-
-      agent = Proofer::Agent.new(vendor: :aamva, applicant: applicant)
-
-      response = begin
-        agent.submit_state_id(state_id_data(row))
-      rescue Aamva::VerificationError => e
-        raise e unless row['Result'] == 'ERROR'
-        e
-      end
-
-      if row['Result'] == 'VERIFIED'
-        expect(response.success?).to eq(true)
-      elsif row['Result'] == 'UNVERIFIED'
-        expect(response.success?).to eq(false)
-        error_attributes = response.errors.keys.map(&:to_s)
-        expected_error_attributes = row['Unverified Attrs'].split(',')
-        expect(Set.new(error_attributes)).to eq(Set.new(expected_error_attributes))
-      elsif row['Result'] == 'ERROR'
-        expect(response).to be_a(Aamva::VerificationError)
-        expect(response.message).to include(row['Error Message'])
-      else
-        raise "Unknown result type: #{row['Result']}"
-      end
-    end
-
-    it "should proof for row #{row['#']} using the new api" do
       response = Aamva::Proofer.new.proof(applicant_data(row))
 
       if row['Result'] == 'VERIFIED'
