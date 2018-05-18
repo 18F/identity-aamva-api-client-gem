@@ -31,7 +31,7 @@ module Aamva
       end
 
       def self.auth_url
-        ENV.fetch('AUTH_URL', DEFAULT_AUTH_URL)
+        Util.fetch_env('AUTH_URL', DEFAULT_AUTH_URL)
       end
 
       private

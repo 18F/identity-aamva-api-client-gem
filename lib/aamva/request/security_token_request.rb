@@ -24,7 +24,7 @@ module Aamva
       end
 
       def self.auth_url
-        ENV.fetch('AUTH_URL', DEFAULT_AUTH_URL)
+        Util.fetch_env('AUTH_URL', DEFAULT_AUTH_URL)
       end
 
       private
@@ -74,13 +74,13 @@ module Aamva
 
       def private_key
         @private_key ||= OpenSSL::PKey::RSA.new(
-          Base64.decode64(ENV['AAMVA_PRIVATE_KEY'])
+          Base64.decode64(Util.fetch_env('AAMVA_PRIVATE_KEY'))
         )
       end
 
       def public_key
         @public_key ||= OpenSSL::X509::Certificate.new(
-          Base64.decode64(ENV['AAMVA_PUBLIC_KEY'])
+          Base64.decode64(Util.fetch_env('AAMVA_PUBLIC_KEY'))
         )
       end
 

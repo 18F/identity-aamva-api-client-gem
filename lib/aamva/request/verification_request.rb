@@ -23,7 +23,7 @@ module Aamva
       end
 
       def self.verification_url
-        ENV.fetch('AAMVA_VERIFICATION_URL', DEFAULT_VERIFICATION_URL)
+        Util.fetch_env('AAMVA_VERIFICATION_URL', DEFAULT_VERIFICATION_URL)
       end
 
       private
@@ -55,7 +55,7 @@ module Aamva
       end
 
       def message_destination_id
-        return 'P6' if ENV['AAMVA_CERT_ENABLED'] == 'true'
+        return 'P6' if Util.fetch_env('AAMVA_CERT_ENABLED') == 'true'
         applicant.state_id_data.state_id_jurisdiction
       end
 
