@@ -31,18 +31,11 @@ module Aamva
 
       attr_reader :applicant, :transaction_id, :auth_token
 
-      def add_street_address_lines_to_xml_document(document)
-        address_nodes = REXML::XPath.match(document, '//ns2:AddressDeliveryPointText')
-        address_nodes[0].add_text(applicant.address.line_1)
-        address_nodes[1].add_text(applicant.address.line_2)
-      end
-
       def add_user_provided_data_to_body
         document = REXML::Document.new(body)
         user_provided_data_map.each do |xpath, data|
           REXML::XPath.first(document, xpath).add_text(data)
         end
-        add_street_address_lines_to_xml_document(document)
         self.body = document.to_s
       end
 
@@ -98,6 +91,8 @@ module Aamva
           '//ns2:PersonGivenName' => applicant.first_name,
           '//ns2:PersonSurName' => applicant.last_name,
           '//ns1:PersonBirthDate' => applicant.dob,
+          '//ns2:AddressDeliveryPointText[1]' => applicant_address.line_1,
+          '//ns2:AddressDeliveryPointText[2]' => applicant_address.line_2,
           '//ns2:LocationCityName' => applicant_address.city,
           '//ns2:LocationStateUsPostalServiceCode' => applicant_address.state,
           '//ns2:LocationPostalCode' => applicant_address.zipcode,
