@@ -13,7 +13,6 @@ module Aamva
       SOAP_ACTION = '"http://aamva.org/dldv/wsdl/2.1/IDLDVService21/VerifyDriverLicenseData"'.freeze
 
       extend Forwardable
-      def_delegators :applicant, :first_name, :last_name, :dob, :state_id_data, :address
 
       def initialize(applicant:, session_id:, auth_token:)
         @applicant = applicant
@@ -34,8 +33,8 @@ module Aamva
 
       def add_street_address_lines_to_xml_document(document)
         address_nodes = REXML::XPath.match(document, '//ns2:AddressDeliveryPointText')
-        address_nodes[0].add_text(address.line_1)
-        address_nodes[1].add_text(address.line_2)
+        address_nodes[0].add_text(applicant.address.line_1)
+        address_nodes[1].add_text(applicant.address.line_2)
       end
 
       def add_user_provided_data_to_body
@@ -62,7 +61,7 @@ module Aamva
       end
 
       def document_category_code
-        case state_id_data.state_id_type
+        case applicant.state_id_data.state_id_type
         when 'drivers_license'
           '1'
         when 'drivers_permit'
@@ -91,16 +90,17 @@ module Aamva
 
       # rubocop:disable Metrics/MethodLength
       def user_provided_data_map
+        applicant_address = applicant.address
         {
-          '//ns2:IdentificationID' => state_id_data.state_id_number,
+          '//ns2:IdentificationID' => applicant.state_id_data.state_id_number,
           '//ns1:DocumentCategoryCode' => document_category_code,
           '//ns1:MessageDestinationId' => message_destination_id,
-          '//ns2:PersonGivenName' => first_name,
-          '//ns2:PersonSurName' => last_name,
-          '//ns1:PersonBirthDate' => dob,
-          '//ns2:LocationCityName' => address.city,
-          '//ns2:LocationStateUsPostalServiceCode' => address.state,
-          '//ns2:LocationPostalCode' => address.zipcode,
+          '//ns2:PersonGivenName' => applicant.first_name,
+          '//ns2:PersonSurName' => applicant.last_name,
+          '//ns1:PersonBirthDate' => applicant.dob,
+          '//ns2:LocationCityName' => applicant_address.city,
+          '//ns2:LocationStateUsPostalServiceCode' => applicant_address.state,
+          '//ns2:LocationPostalCode' => applicant_address.zipcode,
         }
       end
       # rubocop:enable Metrics/MethodLength
