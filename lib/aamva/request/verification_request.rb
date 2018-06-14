@@ -88,7 +88,7 @@ module Aamva
         applicant.uuid
       end
 
-      # rubocop:disable Metrics/MethodLength
+      # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
       def user_provided_data_map
         applicant_address = applicant.address
         {
@@ -103,7 +103,7 @@ module Aamva
           '//ns2:LocationPostalCode' => applicant_address.zipcode,
         }
       end
-      # rubocop:enable Metrics/MethodLength
+      # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
       def uuid
         SecureRandom.uuid
