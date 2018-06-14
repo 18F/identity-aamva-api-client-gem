@@ -14,24 +14,24 @@
               <%= transaction_locator_id %>
             </ns1:TransactionLocatorId>
             <ns1:MessageOriginatorId>GSA</ns1:MessageOriginatorId>
-            <ns1:MessageDestinationId><%= message_destination_id %></ns1:MessageDestinationId>
+            <ns1:MessageDestinationId></ns1:MessageDestinationId>
           </ns1:MessageAddress>
         </ns1:ControlData>
         <ns2:DriverLicenseIdentification>
-          <ns2:IdentificationID xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns2:PersonNameTextType"><%= state_id_data.state_id_number %></ns2:IdentificationID>
+          <ns2:IdentificationID xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns2:PersonNameTextType"></ns2:IdentificationID>
         </ns2:DriverLicenseIdentification>
-        <ns1:PersonBirthDate><%= dob %></ns1:PersonBirthDate>
+        <ns1:PersonBirthDate></ns1:PersonBirthDate>
         <ns2:PersonName>
-          <ns2:PersonGivenName><%= first_name %></ns2:PersonGivenName>
-          <ns2:PersonSurName><%= last_name %></ns2:PersonSurName>
+          <ns2:PersonGivenName></ns2:PersonGivenName>
+          <ns2:PersonSurName></ns2:PersonSurName>
         </ns2:PersonName>
-        <ns1:DocumentCategoryCode><%= document_category_code %></ns1:DocumentCategoryCode>
+        <ns1:DocumentCategoryCode></ns1:DocumentCategoryCode>
         <ns1:Address>
-          <ns2:AddressDeliveryPointText><%= address.line_1 %></ns2:AddressDeliveryPointText>
-          <ns2:AddressDeliveryPointText><%= address.line_2 %></ns2:AddressDeliveryPointText>
-          <ns2:LocationCityName><%= address.city %></ns2:LocationCityName>
-          <ns2:LocationStateUsPostalServiceCode><%= address.state %></ns2:LocationStateUsPostalServiceCode>
-          <ns2:LocationPostalCode><%= address.zipcode %></ns2:LocationPostalCode>
+          <ns2:AddressDeliveryPointText></ns2:AddressDeliveryPointText>
+          <ns2:AddressDeliveryPointText></ns2:AddressDeliveryPointText>
+          <ns2:LocationCityName></ns2:LocationCityName>
+          <ns2:LocationStateUsPostalServiceCode></ns2:LocationStateUsPostalServiceCode>
+          <ns2:LocationPostalCode></ns2:LocationPostalCode>
         </ns1:Address>
       </ns:verifyDriverLicenseDataRequest>
     </ns:VerifyDriverLicenseData>
