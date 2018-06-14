@@ -32,8 +32,15 @@ describe Aamva::Request::VerificationRequest do
   end
 
   describe '#body' do
-    it 'should be a signed request body' do
+    it 'should be a request body' do
       expect(subject.body).to eq(Fixtures.verification_request)
+    end
+
+    it 'should escape XML in applicant data' do
+      applicant.first_name = '<foo></bar>'
+
+      expect(subject.body).to_not include('<foo></bar>')
+      expect(subject.body).to include('&lt;foo&gt;&lt;/bar&gt;')
     end
   end
 

@@ -1,5 +1,7 @@
 require 'erb'
 require 'httpi'
+require 'rexml/document'
+require 'rexml/xpath'
 require 'securerandom'
 
 module Aamva
@@ -30,9 +32,25 @@ module Aamva
 
       attr_reader :applicant, :transaction_id, :auth_token
 
+      def add_street_address_lines_to_xml_document(document)
+        address_nodes = REXML::XPath.match(document, '//ns2:AddressDeliveryPointText')
+        address_nodes[0].add_text(address.line_1)
+        address_nodes[1].add_text(address.line_2)
+      end
+
+      def add_user_provided_data_to_body
+        document = REXML::Document.new(body)
+        user_provided_data_map.each do |xpath, data|
+          REXML::XPath.first(document, xpath).add_text(data)
+        end
+        add_street_address_lines_to_xml_document(document)
+        self.body = document.to_s
+      end
+
       def build_request_body
         renderer = ERB.new(request_body_template)
-        renderer.result(binding).gsub(/^\s+/, '').gsub(/\s+$/, '').delete("\n")
+        self.body = renderer.result(binding)
+        add_user_provided_data_to_body
       end
 
       def build_request_headers
@@ -46,11 +64,11 @@ module Aamva
       def document_category_code
         case state_id_data.state_id_type
         when 'drivers_license'
-          1
+          '1'
         when 'drivers_permit'
-          2
+          '2'
         when 'state_id_card'
-          3
+          '3'
         end
       end
 
@@ -70,6 +88,22 @@ module Aamva
       def transaction_locator_id
         applicant.uuid
       end
+
+      # rubocop:disable Metrics/MethodLength
+      def user_provided_data_map
+        {
+          '//ns2:IdentificationID' => state_id_data.state_id_number,
+          '//ns1:DocumentCategoryCode' => document_category_code,
+          '//ns1:MessageDestinationId' => message_destination_id,
+          '//ns2:PersonGivenName' => first_name,
+          '//ns2:PersonSurName' => last_name,
+          '//ns1:PersonBirthDate' => dob,
+          '//ns2:LocationCityName' => address.city,
+          '//ns2:LocationStateUsPostalServiceCode' => address.state,
+          '//ns2:LocationPostalCode' => address.zipcode,
+        }
+      end
+      # rubocop:enable Metrics/MethodLength
 
       def uuid
         SecureRandom.uuid

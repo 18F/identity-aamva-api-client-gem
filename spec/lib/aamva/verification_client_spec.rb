@@ -29,7 +29,7 @@ describe Aamva::VerificationClient do
 
       verification_stub = stub_verification_request
       verification_stub.with do |request|
-        xml_text_at_path(request.body, '//ns:token') == 'ThisIsTheToken'
+        xml_text_at_path(request.body, '//ns:token').gsub(/\s/, '') == 'ThisIsTheToken'
       end
 
       subject.send_verification_request(applicant: applicant, session_id: '1234-abcd-efgh')

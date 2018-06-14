@@ -49,10 +49,7 @@ module Fixtures
   end
 
   def self.verification_request
-    read_fixture_file('requests/verification_request.xml').
-      gsub(/^\s+/, '').
-      gsub(/\s+$/, '').
-      delete("\n")
+    read_fixture_file('requests/verification_request.xml')
   end
 
   def self.verification_response
