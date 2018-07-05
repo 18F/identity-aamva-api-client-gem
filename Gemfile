@@ -1,10 +1,9 @@
 source 'https://rubygems.org'
 
-ruby '2.3.3'
-
 gemspec
 
-gem 'proofer', git: 'git@github.com:18F/identity-proofer-gem', tag: 'v2.5.0'
+# TODO: Swtich back to tag after merge in other repo
+gem 'proofer', git: 'git@github.com:18F/identity-proofer-gem', branch: 'jmhooper-empty-array-for-unset-attributes'
 
 group :development, :test do
   gem 'rubocop'

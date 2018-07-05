@@ -12,10 +12,6 @@ describe Aamva::Response::VerificationResponse do
       dob: true,
       last_name: true,
       first_name: true,
-      address1: true,
-      city: true,
-      state: true,
-      zipcode: true,
     }
   end
 
@@ -77,12 +73,12 @@ describe Aamva::Response::VerificationResponse do
         )
         delete_match_indicator(
           body,
-          'AddressZIP5MatchIndicator'
+          'PersonFirstNameExactMatchIndicator'
         )
       end
 
       it 'returns an array with the reasons verifiation failed' do
-        expect(subject.reasons).to eq(['Failed to verify dob', 'Response was missing zipcode'])
+        expect(subject.reasons).to eq(['Failed to verify dob', 'Response was missing first_name'])
       end
     end
   end
@@ -144,12 +140,12 @@ describe Aamva::Response::VerificationResponse do
         )
         delete_match_indicator(
           body,
-          'AddressZIP5MatchIndicator'
+          'PersonFirstNameExactMatchIndicator'
         )
       end
 
       it 'returns a hash of values that were verified and values that were not' do
-        expected_result = verification_results.merge(dob: false, zipcode: nil)
+        expected_result = verification_results.merge(dob: false, first_name: nil)
 
         expect(subject.verification_results).to eq(expected_result)
       end

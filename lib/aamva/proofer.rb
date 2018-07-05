@@ -4,14 +4,10 @@ module Aamva
   class Proofer < Proofer::Base
     vendor_name 'aamva:state_id'
 
-    attributes :uuid,
+    required_attributes :uuid,
                :first_name,
                :last_name,
                :dob,
-               :address1,
-               :city,
-               :state,
-               :zipcode,
                :state_id_number,
                :state_id_type,
                :state_id_jurisdiction

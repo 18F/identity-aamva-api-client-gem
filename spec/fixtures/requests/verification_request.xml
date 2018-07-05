@@ -26,13 +26,6 @@
           <ns2:PersonSurName>Ross</ns2:PersonSurName>
         </ns2:PersonName>
         <ns1:DocumentCategoryCode>1</ns1:DocumentCategoryCode>
-        <ns1:Address>
-          <ns2:AddressDeliveryPointText>123 Sunnyside way</ns2:AddressDeliveryPointText>
-          <ns2:AddressDeliveryPointText>Box G</ns2:AddressDeliveryPointText>
-          <ns2:LocationCityName>Sterling</ns2:LocationCityName>
-          <ns2:LocationStateUsPostalServiceCode>VA</ns2:LocationStateUsPostalServiceCode>
-          <ns2:LocationPostalCode>20176</ns2:LocationPostalCode>
-        </ns1:Address>
       </ns:verifyDriverLicenseDataRequest>
     </ns:VerifyDriverLicenseData>
   </soap:Body>

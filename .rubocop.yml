@@ -142,12 +142,6 @@ Style/FrozenStringLiteralComment:
                  to help transition from Ruby 2.3.0 to Ruby 3.0.
   Enabled: false
 
-Style/IfUnlessModifier:
-  Description: Favor modifier if/unless usage when you have a single-line body.
-  StyleGuide: https://github.com/bbatsov/ruby-style-guide#if-as-a-modifier
-  Enabled: true
-  MaxLineLength: 80
-
 # Checks the indentation of the first element in an array literal.
 Layout/IndentArray:
   # The value `special_inside_parentheses` means that array literals with
@@ -218,11 +212,22 @@ Style/TrailingCommaInArguments:
     - consistent_comma
     - no_comma
 
-Style/TrailingCommaInLiteral:
-  # If `comma`, the cop requires a comma after the last item in an array or
-  # hash, but only when each item is on its own line.
+Style/TrailingCommaInArrayLiteral:
+  # If `comma`, the cop requires a comma after the last item in an array but
+  # only when each item is on its own line.
   # If `consistent_comma`, the cop requires a comma after the last item of all
-  # non-empty array and hash literals.
+  # non-empty array literals.
+  EnforcedStyleForMultiline: comma
+  SupportedStylesForMultiline:
+    - comma
+    - consistent_comma
+    - no_comma
+
+Style/TrailingCommaInHashLiteral:
+  # If `comma`, the cop requires a comma after the last item in an hash, but
+  # only when each item is on its own line.
+  # If `consistent_comma`, the cop requires a comma after the last item of all
+  # non-empty hash literals.
   EnforcedStyleForMultiline: comma
   SupportedStylesForMultiline:
     - comma
