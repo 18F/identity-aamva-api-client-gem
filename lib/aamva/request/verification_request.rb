@@ -91,11 +91,6 @@ module Aamva
           '//ns2:PersonGivenName' => applicant.first_name,
           '//ns2:PersonSurName' => applicant.last_name,
           '//ns1:PersonBirthDate' => applicant.dob,
-          '//ns2:AddressDeliveryPointText[1]' => applicant_address.line_1,
-          '//ns2:AddressDeliveryPointText[2]' => applicant_address.line_2,
-          '//ns2:LocationCityName' => applicant_address.city,
-          '//ns2:LocationStateUsPostalServiceCode' => applicant_address.state,
-          '//ns2:LocationPostalCode' => applicant_address.zipcode,
         }
       end
       # rubocop:enable Metrics/MethodLength, Metrics/AbcSize

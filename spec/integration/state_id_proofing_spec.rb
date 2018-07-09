@@ -44,25 +44,13 @@ describe 'State ID proofing' do
       first_name: row['First Name'],
       last_name: row['Last Name'],
       dob: row['DOB (YYYYMMDD)'],
-    }.merge(address_data(row))
-    .merge(state_id_data(row))
-  end
-
-  def address_data(row)
-    address_elements = row['Address'].split('@')
-    {
-      address1: address_elements[0],
-      # address2: address_elements[1],
-      city: address_elements[2],
-      state: address_elements[3],
-      zipcode: address_elements[4],
-    }
+    }.merge(state_id_data(row))
   end
 
   def state_id_data(row)
     {
       state_id_number: row['Document #'],
-      state_id_jurisdiction: address_data(row)[:state],
+      state_id_jurisdiction: row['Address'].split('@')[4],
       state_id_type: state_id_type_from_category(row['Document Type']),
     }
   end

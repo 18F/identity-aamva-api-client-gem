@@ -1,10 +1,8 @@
 source 'https://rubygems.org'
 
-ruby '2.3.3'
-
 gemspec
 
-gem 'proofer', git: 'git@github.com:18F/identity-proofer-gem', tag: 'v2.5.0'
+gem 'proofer', git: 'git@github.com:18F/identity-proofer-gem', tag: 'v2.6.1'
 
 group :development, :test do
   gem 'rubocop'

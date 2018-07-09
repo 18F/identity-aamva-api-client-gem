@@ -1,17 +1,10 @@
 describe Aamva::VerificationClient do
   let(:applicant) do
     applicant = Aamva::Applicant.from_proofer_applicant(
-      Proofer::Applicant.new(
-        uuid: '1234-4567-abcd-efgh',
-        first_name: 'Bob',
-        last_name: 'Ross',
-        dob: '10/29/1942',
-        address1: '123 Sunnyside way',
-        address2: 'Box G',
-        city: 'Sterling',
-        state: 'VA',
-        zipcode: '20176'
-      )
+      uuid: '1234-4567-abcd-efgh',
+      first_name: 'Bob',
+      last_name: 'Ross',
+      dob: '10/29/1942'
     )
     applicant.state_id_data.merge!(
       state_id_number: '123456789',

@@ -10,10 +10,6 @@ module Aamva
         'PersonBirthDateMatchIndicator' => :dob,
         'PersonLastNameExactMatchIndicator' => :last_name,
         'PersonFirstNameExactMatchIndicator' => :first_name,
-        'AddressLine1MatchIndicator' => :address1,
-        'AddressCityMatchIndicator' => :city,
-        'AddressStateCodeMatchIndicator' => :state,
-        'AddressZIP5MatchIndicator' => :zipcode,
       }.freeze
 
       REQUIRED_VERIFICATION_ATTRIBUTES = %i[
@@ -21,10 +17,6 @@ module Aamva
         dob
         last_name
         first_name
-        address1
-        city
-        state
-        zipcode
       ].freeze
 
       attr_reader :verification_results

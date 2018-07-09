@@ -27,11 +27,6 @@ describe Aamva::Proofer do
       first_name: true,
       first_name_fuzzy: true,
       first_name_fuzzy_alternative: true,
-      address1: true,
-      address2: true,
-      city: true,
-      state: true,
-      zipcode: true,
     }
   end
   let(:result) { Proofer::Result.new }
@@ -67,7 +62,7 @@ describe Aamva::Proofer do
         subject.aamva_proof(state_id_data, result)
 
         expect(result.failed?).to eq(true)
-        expect(result.errors).to eq({ dob: ['UNVERIFIED'], zipcode: ['UNVERIFIED'] })
+        expect(result.errors).to eq(dob: ['UNVERIFIED'], zipcode: ['UNVERIFIED'])
       end
     end
 
@@ -79,7 +74,7 @@ describe Aamva::Proofer do
         subject.aamva_proof(state_id_data, result)
 
         expect(result.failed?).to eq(true)
-        expect(result.errors).to eq({ dob: ['UNVERIFIED'], zipcode: ['MISSING'] })
+        expect(result.errors).to eq(dob: ['UNVERIFIED'], zipcode: ['MISSING'])
       end
     end
   end
