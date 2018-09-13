@@ -51,7 +51,7 @@ describe Aamva::Request::VerificationRequest do
   describe '#url' do
     it 'should be the AAMVA verification url from the params' do
       expect(subject.url).to eq(
-        URI.parse(Aamva::Request::VerificationRequest.verification_url)
+        Aamva::Request::VerificationRequest.verification_url
       )
     end
   end

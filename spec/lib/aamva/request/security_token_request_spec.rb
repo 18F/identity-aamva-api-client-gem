@@ -29,7 +29,7 @@ describe Aamva::Request::SecurityTokenRequest do
   describe '#url' do
     it 'should be the AAMVA authentication url' do
       expect(subject.url).to eq(
-        URI.parse('https://authentication-cert.aamva.org/Authentication/Authenticate.svc')
+        'https://authentication-cert.aamva.org/Authentication/Authenticate.svc'
       )
     end
   end

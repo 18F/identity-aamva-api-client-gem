@@ -1,18 +1,20 @@
 require 'erb'
-require 'httpi'
 require 'rexml/document'
 require 'rexml/xpath'
 require 'securerandom'
+require 'typhoeus'
 
 module Aamva
   module Request
-    class VerificationRequest < HTTPI::Request
+    class VerificationRequest
       CONTENT_TYPE = 'application/soap+xml;charset=UTF-8'.freeze
       DEFAULT_VERIFICATION_URL =
         'https://verificationservices-cert.aamva.org:18449/dldv/2.1/online'.freeze
       SOAP_ACTION = '"http://aamva.org/dldv/wsdl/2.1/IDLDVService21/VerifyDriverLicenseData"'.freeze
 
       extend Forwardable
+
+      attr_accessor :body, :headers, :url
 
       def initialize(applicant:, session_id:, auth_token:)
         @applicant = applicant
@@ -21,6 +23,12 @@ module Aamva
         self.url = VerificationRequest.verification_url
         self.body = build_request_body
         self.headers = build_request_headers
+      end
+
+      def send
+        Response::VerificationResponse.new(
+          Typhoeus.post(url, body: body, headers: headers)
+        )
       end
 
       def self.verification_url

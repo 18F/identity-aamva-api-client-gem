@@ -29,7 +29,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency('dotenv')
   s.add_dependency('hashie')
-  s.add_dependency('httpi')
+  s.add_dependency('typhoeus')
   s.add_dependency('xmldsig')
 
   s.add_development_dependency('pry-byebug')

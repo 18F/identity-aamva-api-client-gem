@@ -5,11 +5,7 @@ require 'pry-byebug'
 require 'dotenv'
 
 require 'proofer'
-require 'httpi'
 require 'aamva'
-
-# We don't want to see HTTPI logs in rspec output
-HTTPI.log = false
 
 Dir[File.dirname(__FILE__) + '/support/*.rb'].sort.each { |file| require file }
 

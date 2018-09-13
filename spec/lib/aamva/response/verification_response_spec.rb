@@ -4,7 +4,7 @@ require 'rexml/xpath'
 describe Aamva::Response::VerificationResponse do
   let(:status_code) { 200 }
   let(:response_body) { Fixtures.verification_response }
-  let(:http_response) { HTTPI::Response.new(status_code, {}, response_body) }
+  let(:http_response) { Typhoeus::Response.new(code: status_code, body: response_body) }
   let(:verification_results) do
     {
       state_id_number: true,
