@@ -11,17 +11,10 @@ jobs:
 
     steps:
       - checkout
-      - restore-cache:
-          keys:
-            - aamva-api-client-gem-bundle-{{ checksum "Gemfile.lock" }}
       - run:
           name: Install dependencies
           command: |
             bundle check || bundle install --retry=3 --path vendor/bundle
-      - save-cache:
-          key: aamva-api-client-gem-bundle-{{ checksum "Gemfile.lock" }}
-          paths:
-            - vendor/bundle
       - run:
           name: Run Tests
           command: |
