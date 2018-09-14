@@ -1,5 +1,3 @@
-require 'httpi'
-
 module Aamva
   class AuthenticationClient
     AAMVA_TOKEN_FRESHNESS_SECONDS = 28 * 60
@@ -26,13 +24,13 @@ module Aamva
 
     def send_auth_token_request
       sct_request = Request::SecurityTokenRequest.new
-      sct_response = Response::SecurityTokenResponse.new(HTTPI.post(sct_request))
+      sct_response = sct_request.send
       token_request = Request::AuthenticationTokenRequest.new(
         security_context_token_identifier: sct_response.security_context_token_identifier,
         security_context_token_reference: sct_response.security_context_token_reference,
         client_hmac_secret: sct_request.nonce, server_hmac_secret: sct_response.nonce
       )
-      token_response = Response::AuthenticationTokenResponse.new(HTTPI.post(token_request))
+      token_response = token_request.send
       AuthenticationClient.auth_token = token_response.auth_token
       AuthenticationClient.auth_token_expiration = Time.now + AAMVA_TOKEN_FRESHNESS_SECONDS
     end

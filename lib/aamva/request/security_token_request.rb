@@ -1,26 +1,34 @@
 require 'erb'
-require 'httpi'
 require 'openssl'
 require 'securerandom'
 require 'time'
+require 'typhoeus'
 require 'xmldsig'
 
 module Aamva
   module Request
-    class SecurityTokenRequest < HTTPI::Request
+    class SecurityTokenRequest
       DEFAULT_AUTH_URL = 'https://authentication-cert.aamva.org/Authentication/Authenticate.svc'.freeze
       CONTENT_TYPE = 'application/soap+xml;charset=UTF-8'.freeze
       SOAP_ACTION =
         '"http://aamva.org/authentication/3.1.0/IAuthenticationService/Authenticate"'.freeze
 
+      attr_reader :body, :headers, :url
+
       def initialize
-        self.body = build_request_body
-        self.headers = build_request_headers
-        self.url = SecurityTokenRequest.auth_url
+        @body = build_request_body
+        @headers = build_request_headers
+        @url = SecurityTokenRequest.auth_url
       end
 
       def nonce
         @nonce ||= SecureRandom.base64(32)
+      end
+
+      def send
+        Response::SecurityTokenResponse.new(
+          Typhoeus.post(url, body: body, headers: headers)
+        )
       end
 
       def self.auth_url

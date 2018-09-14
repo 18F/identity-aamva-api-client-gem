@@ -1,12 +1,12 @@
 require 'erb'
-require 'httpi'
 require 'rexml/document'
 require 'rexml/xpath'
 require 'securerandom'
+require 'typhoeus'
 
 module Aamva
   module Request
-    class VerificationRequest < HTTPI::Request
+    class VerificationRequest
       CONTENT_TYPE = 'application/soap+xml;charset=UTF-8'.freeze
       DEFAULT_VERIFICATION_URL =
         'https://verificationservices-cert.aamva.org:18449/dldv/2.1/online'.freeze
@@ -14,13 +14,21 @@ module Aamva
 
       extend Forwardable
 
+      attr_reader :body, :headers, :url
+
       def initialize(applicant:, session_id:, auth_token:)
         @applicant = applicant
         @transaction_id = session_id
         @auth_token = auth_token
-        self.url = VerificationRequest.verification_url
-        self.body = build_request_body
-        self.headers = build_request_headers
+        @url = VerificationRequest.verification_url
+        @body = build_request_body
+        @headers = build_request_headers
+      end
+
+      def send
+        Response::VerificationResponse.new(
+          Typhoeus.post(url, body: body, headers: headers)
+        )
       end
 
       def self.verification_url
@@ -36,12 +44,12 @@ module Aamva
         user_provided_data_map.each do |xpath, data|
           REXML::XPath.first(document, xpath).add_text(data)
         end
-        self.body = document.to_s
+        @body = document.to_s
       end
 
       def build_request_body
         renderer = ERB.new(request_body_template)
-        self.body = renderer.result(binding)
+        @body = renderer.result(binding)
         add_user_provided_data_to_body
       end
 

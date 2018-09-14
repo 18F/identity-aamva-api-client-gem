@@ -11,7 +11,7 @@ describe Aamva::AuthenticationClient do
   describe '#fetch_token' do
     before do
       security_token_request = Aamva::Request::SecurityTokenRequest.new
-      security_token_request.body = Fixtures.security_token_request
+      allow(security_token_request).to receive(:body).and_return(Fixtures.security_token_request)
       allow(security_token_request).to receive(:nonce).and_return(client_hmac_secret)
       allow(Aamva::Request::SecurityTokenRequest).to receive(:new).
         and_return(security_token_request)
@@ -23,7 +23,7 @@ describe Aamva::AuthenticationClient do
         client_hmac_secret: client_hmac_secret,
         server_hmac_secret: server_hmac_secret
       )
-      auth_token_request.body = Fixtures.authentication_token_request
+      allow(auth_token_request).to receive(:body).and_return(Fixtures.authentication_token_request)
       allow(Aamva::Request::AuthenticationTokenRequest).to receive(:new).
         with(
           security_context_token_identifier: security_context_token_identifier,

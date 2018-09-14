@@ -1,12 +1,11 @@
 module Aamva
   class VerificationClient
     def send_verification_request(applicant:, session_id: nil)
-      request = Request::VerificationRequest.new(
+      Request::VerificationRequest.new(
         applicant: applicant,
         session_id: session_id,
         auth_token: auth_token
-      )
-      Response::VerificationResponse.new(HTTPI.post(request))
+      ).send
     end
 
     private

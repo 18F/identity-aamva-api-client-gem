@@ -1,9 +1,7 @@
-require 'httpi'
-
 describe Aamva::Response::AuthenticationTokenResponse do
   let(:status_code) { 200 }
   let(:response_body) { Fixtures.authentication_token_response }
-  let(:http_response) { HTTPI::Response.new(status_code, {}, response_body) }
+  let(:http_response) { Typhoeus::Response.new(code: status_code, body: response_body) }
 
   subject do
     described_class.new(http_response)

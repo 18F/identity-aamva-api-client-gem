@@ -2,7 +2,7 @@ describe Aamva::SoapErrorHander do
   let(:response_body) { Fixtures.soap_fault_response }
 
   subject do
-    http_response = HTTPI::Response.new(200, {}, response_body)
+    http_response = Typhoeus::Response.new(code: 200, body: response_body)
     described_class.new(http_response)
   end
 
