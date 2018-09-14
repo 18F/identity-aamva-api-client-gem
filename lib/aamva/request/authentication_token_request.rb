@@ -13,6 +13,7 @@ module Aamva
       CONTENT_TYPE = 'application/soap+xml;charset=UTF-8'.freeze
       SOAP_ACTION =
         '"http://aamva.org/authentication/3.1.0/IAuthenticationService/Authenticate"'.freeze
+      TIMEOUT = ENV.fetch('AAMVA_AUTH_REQUEST_TIMEOUT', 3).to_i
 
       attr_reader :body, :headers, :url
       attr_reader :security_context_token_identifier, :security_context_token_reference
@@ -33,7 +34,7 @@ module Aamva
 
       def send
         Response::AuthenticationTokenResponse.new(
-          Typhoeus.post(url, body: body, headers: headers)
+          Typhoeus.post(url, body: body, headers: headers, timeout: TIMEOUT)
         )
       end
 

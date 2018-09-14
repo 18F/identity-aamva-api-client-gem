@@ -8,6 +8,7 @@ module Aamva
 
       def initialize(http_response)
         @http_response = http_response
+        handle_timeout_error
         handle_soap_error
         handle_http_error
         parse_response
@@ -26,6 +27,11 @@ module Aamva
 
       attr_reader :http_response
       attr_writer :security_context_token_identifier, :security_context_token_reference
+
+      def handle_timeout_error
+        return unless http_response.timed_out?
+        raise ::Proofer::TimeoutError, 'Timed out waiting for security token response'
+      end
 
       def handle_http_error
         status = http_response.code

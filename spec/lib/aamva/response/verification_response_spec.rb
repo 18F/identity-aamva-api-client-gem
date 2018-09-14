@@ -4,7 +4,10 @@ require 'rexml/xpath'
 describe Aamva::Response::VerificationResponse do
   let(:status_code) { 200 }
   let(:response_body) { Fixtures.verification_response }
-  let(:http_response) { Typhoeus::Response.new(code: status_code, body: response_body) }
+  let(:return_code) { :ok }
+  let(:http_response) do
+    Typhoeus::Response.new(code: status_code, body: response_body, return_code: return_code)
+  end
   let(:verification_results) do
     {
       state_id_number: true,
@@ -20,6 +23,17 @@ describe Aamva::Response::VerificationResponse do
   end
 
   describe '#initialize' do
+    context 'when the request timed out' do
+      let(:return_code) { :operation_timedout }
+
+      it 'raises a timeout error' do
+        expect { subject }.to raise_error(
+          Proofer::TimeoutError,
+          'Timed out waiting for verification response'
+        )
+      end
+    end
+
     context 'with a non-200 status code' do
       let(:status_code) { 500 }
 

@@ -1,13 +1,27 @@
 describe Aamva::Response::AuthenticationTokenResponse do
   let(:status_code) { 200 }
   let(:response_body) { Fixtures.authentication_token_response }
-  let(:http_response) { Typhoeus::Response.new(code: status_code, body: response_body) }
+  let(:return_code) { :ok }
+  let(:http_response) do
+    Typhoeus::Response.new(code: status_code, body: response_body, return_code: return_code)
+  end
 
   subject do
     described_class.new(http_response)
   end
 
   describe '#initialize' do
+    context 'when the request timed out' do
+      let(:return_code) { :operation_timedout }
+
+      it 'raises a timeout error' do
+        expect { subject }.to raise_error(
+          Proofer::TimeoutError,
+          'Timed out waiting for authentication token response'
+        )
+      end
+    end
+
     context 'with a non-200 status code' do
       let(:status_code) { 500 }
 
