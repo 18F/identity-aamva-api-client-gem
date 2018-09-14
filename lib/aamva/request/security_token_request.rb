@@ -13,12 +13,12 @@ module Aamva
       SOAP_ACTION =
         '"http://aamva.org/authentication/3.1.0/IAuthenticationService/Authenticate"'.freeze
 
-      attr_accessor :body, :headers, :url
+      attr_reader :body, :headers, :url
 
       def initialize
-        self.body = build_request_body
-        self.headers = build_request_headers
-        self.url = SecurityTokenRequest.auth_url
+        @body = build_request_body
+        @headers = build_request_headers
+        @url = SecurityTokenRequest.auth_url
       end
 
       def nonce

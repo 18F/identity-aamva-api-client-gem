@@ -14,15 +14,15 @@ module Aamva
 
       extend Forwardable
 
-      attr_accessor :body, :headers, :url
+      attr_reader :body, :headers, :url
 
       def initialize(applicant:, session_id:, auth_token:)
         @applicant = applicant
         @transaction_id = session_id
         @auth_token = auth_token
-        self.url = VerificationRequest.verification_url
-        self.body = build_request_body
-        self.headers = build_request_headers
+        @url = VerificationRequest.verification_url
+        @body = build_request_body
+        @headers = build_request_headers
       end
 
       def send
@@ -44,12 +44,12 @@ module Aamva
         user_provided_data_map.each do |xpath, data|
           REXML::XPath.first(document, xpath).add_text(data)
         end
-        self.body = document.to_s
+        @body = document.to_s
       end
 
       def build_request_body
         renderer = ERB.new(request_body_template)
-        self.body = renderer.result(binding)
+        @body = renderer.result(binding)
         add_user_provided_data_to_body
       end
 
