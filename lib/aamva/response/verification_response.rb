@@ -55,8 +55,9 @@ module Aamva
       attr_reader :http_response, :missing_attributes
 
       def handle_timeout_error
-        return unless http_response.timed_out?
-        raise ::Proofer::TimeoutError, 'Timed out waiting for verification response'
+        TimeoutErrorHander.new(
+          http_response: http_response, context: :verification
+        ).call
       end
 
       def handle_http_error

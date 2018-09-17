@@ -17,8 +17,9 @@ module Aamva
       attr_writer :auth_token
 
       def handle_timeout_error
-        return unless http_response.timed_out?
-        raise ::Proofer::TimeoutError, 'Timed out waiting for authentication token response'
+        TimeoutErrorHander.new(
+          http_response: http_response, context: 'authentication token'
+        ).call
       end
 
       def handle_http_error

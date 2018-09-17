@@ -29,8 +29,9 @@ module Aamva
       attr_writer :security_context_token_identifier, :security_context_token_reference
 
       def handle_timeout_error
-        return unless http_response.timed_out?
-        raise ::Proofer::TimeoutError, 'Timed out waiting for security token response'
+        TimeoutErrorHander.new(
+          http_response: http_response, context: 'security token'
+        ).call
       end
 
       def handle_http_error
