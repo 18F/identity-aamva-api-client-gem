@@ -11,7 +11,6 @@ module Aamva
       DEFAULT_VERIFICATION_URL =
         'https://verificationservices-cert.aamva.org:18449/dldv/2.1/online'.freeze
       SOAP_ACTION = '"http://aamva.org/dldv/wsdl/2.1/IDLDVService21/VerifyDriverLicenseData"'.freeze
-      DEFAULT_TIMEOUT = ENV.fetch('AAMVA_VERIFICATION_REQUEST_TIMEOUT', 5).to_i
 
       extend Forwardable
 
