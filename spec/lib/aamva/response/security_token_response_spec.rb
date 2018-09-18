@@ -21,7 +21,7 @@ describe Aamva::Response::SecurityTokenResponse do
       it 'raises a timeout error' do
         expect { subject }.to raise_error(
           Proofer::TimeoutError,
-          'Timed out waiting for security token response'
+          'AAMVA timed out waiting for security token response'
         )
       end
     end
