@@ -7,7 +7,7 @@ module Aamva
 
     def call
       return unless http_response.timed_out?
-      raise ::Proofer::TimeoutError, "Timed out waiting for #{context} response"
+      raise ::Proofer::TimeoutError, "AAMVA timed out waiting for #{context} response"
     end
 
     private
