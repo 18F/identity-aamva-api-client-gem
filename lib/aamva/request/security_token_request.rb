@@ -27,7 +27,7 @@ module Aamva
 
       def send
         Response::SecurityTokenResponse.new(
-          Typhoeus.post(url, body: body, headers: headers)
+          Typhoeus.post(url, body: body, headers: headers, timeout: timeout)
         )
       end
 
@@ -106,6 +106,10 @@ module Aamva
 
       def uuid
         SecureRandom.uuid
+      end
+
+      def timeout
+        ENV.fetch('AAMVA_AUTH_REQUEST_TIMEOUT', 5).to_i
       end
     end
   end
