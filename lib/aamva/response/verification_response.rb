@@ -55,7 +55,7 @@ module Aamva
       attr_reader :http_response, :missing_attributes
 
       def handle_timeout_error
-        TimeoutErrorHander.new(
+        TimeoutErrorHandler.new(
           http_response: http_response, context: :verification
         ).call
       end

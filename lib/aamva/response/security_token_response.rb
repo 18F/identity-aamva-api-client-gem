@@ -29,7 +29,7 @@ module Aamva
       attr_writer :security_context_token_identifier, :security_context_token_reference
 
       def handle_timeout_error
-        TimeoutErrorHander.new(
+        TimeoutErrorHandler.new(
           http_response: http_response, context: 'security token'
         ).call
       end

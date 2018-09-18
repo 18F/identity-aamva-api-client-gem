@@ -17,7 +17,7 @@ module Aamva
       attr_writer :auth_token
 
       def handle_timeout_error
-        TimeoutErrorHander.new(
+        TimeoutErrorHandler.new(
           http_response: http_response, context: 'authentication token'
         ).call
       end

@@ -1,5 +1,5 @@
 module Aamva
-  class TimeoutErrorHander
+  class TimeoutErrorHandler
     def initialize(http_response:, context:)
       @http_response = http_response
       @context = context
