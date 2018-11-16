@@ -22,8 +22,8 @@
         </ns2:DriverLicenseIdentification>
         <ns1:PersonBirthDate>1942-10-29</ns1:PersonBirthDate>
         <ns2:PersonName>
-          <ns2:PersonGivenName>Bob</ns2:PersonGivenName>
-          <ns2:PersonSurName>Ross</ns2:PersonSurName>
+          <ns2:PersonGivenName>Testy</ns2:PersonGivenName>
+          <ns2:PersonSurName>McTesterson</ns2:PersonSurName>
         </ns2:PersonName>
         <ns1:DocumentCategoryCode>1</ns1:DocumentCategoryCode>
       </ns:verifyDriverLicenseDataRequest>

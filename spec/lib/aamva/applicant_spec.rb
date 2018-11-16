@@ -2,8 +2,8 @@ describe Aamva::Applicant do
   let(:proofer_applicant) do
     {
       uuid: '1234-4567-abcd-efgh',
-      first_name: 'Bob',
-      last_name: 'Ross',
+      first_name: 'Testy',
+      last_name: 'McTesterson',
       dob: '10/29/1942',
       state_id_number: '123456789',
       state_id_jurisdiction: 'VA',
