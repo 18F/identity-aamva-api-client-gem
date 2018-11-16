@@ -7,7 +7,7 @@
       <Address>http://www.w3.org/2005/08/addressing/anonymous</Address>
     </ReplyTo>
     <wsse:Security xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" soap:mustUnderstand="true">
-      <wsse:BinarySecurityToken EncodingType="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-soap-message-security-1.0#Base64Binary" ValueType="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-x509-token-profile-1.0#X509v3" wsu:Id="X509-12345678-abcd-efgh-ijkl-1234567890ab">MIIErTCCA5WgAwIBAgIJAJNt9tI5WfDkMA0GCSqGSIb3DQEBBQUAMIGVMQswCQYDVQQGEwJVUzESMBAGA1UECBMJTG91aXNpYW5hMRQwEgYDVQQHEwtCYXRvbiBSb3VnZTEMMAoGA1UEChMDR1NBMQwwCgYDVQQLEwMxOEYxGDAWBgNVBAMTD0pvbmF0aGFuIEhvb3BlcjEmMCQGCSqGSIb3DQEJARYXam9uYXRoYW4uaG9vcGVyQGdzYS5nb3YwHhcNMTcxMTE2MjEyNzQ4WhcNMTcxMjE2MjEyNzQ4WjCBlTELMAkGA1UEBhMCVVMxEjAQBgNVBAgTCUxvdWlzaWFuYTEUMBIGA1UEBxMLQmF0b24gUm91Z2UxDDAKBgNVBAoTA0dTQTEMMAoGA1UECxMDMThGMRgwFgYDVQQDEw9Kb25hdGhhbiBIb29wZXIxJjAkBgkqhkiG9w0BCQEWF2pvbmF0aGFuLmhvb3BlckBnc2EuZ292MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0TAHphnBIcBHfDbMwfwLOwcYcIic7Rs/A2DFJ+XEPOq2jQv7i7t5hxSv6qrsU8r5tzVtP6vziEKIEW3hxE1B/+4JW/oISMI3D3lRHzq12qKI1eGbw0ug8RIptvzZoTZdy0am+DaspMprG19RHKc3c4Vm7N/OKFcWq1OkyNfi/r05un3VdJwY0tJLp00qccEuueF6kDNV9PigteyBFFXFOM757//B0X/pukwRU+/9F+pEdWpdxp/d8KCAcvpFI85bp/YZX+GoZ0GylRTahVMAiSvh14x1BmU0JUXlQgFyV66gcQ0uwGMYAV2HZUsBvyhKcMayoRXPVj71GzMQS6zR7QIDAQABo4H9MIH6MB0GA1UdDgQWBBQR/yeYYzz/kPMh4LWvwcNU6CD3GTCBygYDVR0jBIHCMIG/gBQR/yeYYzz/kPMh4LWvwcNU6CD3GaGBm6SBmDCBlTELMAkGA1UEBhMCVVMxEjAQBgNVBAgTCUxvdWlzaWFuYTEUMBIGA1UEBxMLQmF0b24gUm91Z2UxDDAKBgNVBAoTA0dTQTEMMAoGA1UECxMDMThGMRgwFgYDVQQDEw9Kb25hdGhhbiBIb29wZXIxJjAkBgkqhkiG9w0BCQEWF2pvbmF0aGFuLmhvb3BlckBnc2EuZ292ggkAk2320jlZ8OQwDAYDVR0TBAUwAwEB/zANBgkqhkiG9w0BAQUFAAOCAQEAOp8XOFfGtAGcdFgU5P7rQxkUiNGj2b5fryKM+pGhltyt/F7dwHEwj4IFLVXBFdL+4pMGvQ0RO4RNZSZtzvXHsefAzRJy3pJzMgriU1oH8vFrrIOAO/FhpcjGPrsQdbLAW8hiJNks6FH0hGjewS07fyDOUs9rl7asDWZz7Mjt9w5odH6Vm8IXXYi4ONL3JbWZxLbIg76tjHENEZ8XkCmLNO78YzV9aYBm+TVon71DxPtjaKjAoOTI224JXdoCC5FsTmxIHZw8xS59+2vkm2jFXV7RvyFT7A6u365UCaj3drdzHeEWGqKfBmlwTRH8O/d5I7SGpwXZ1u2RNdPPlf8HKQ==</wsse:BinarySecurityToken>
+      <wsse:BinarySecurityToken EncodingType="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-soap-message-security-1.0#Base64Binary" ValueType="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-x509-token-profile-1.0#X509v3" wsu:Id="X509-12345678-abcd-efgh-ijkl-1234567890ab"></wsse:BinarySecurityToken>
       <wsu:Timestamp wsu:Id="TS-12345678-abcd-efgh-ijkl-1234567890ab">
         <wsu:Created>2017-01-01T00:00:00Z</wsu:Created>
         <wsu:Expires>2017-01-01T00:05:00Z</wsu:Expires>
@@ -37,10 +37,10 @@
             <ds:DigestValue>0ym9+h240usFC2QKKe/ivmid5kc=</ds:DigestValue>
           </ds:Reference>
         </ds:SignedInfo>
-        <ds:SignatureValue>YQD0Vx06X7kHOgIxUslW9LHvluOwNvvHfJkRiyMHYjikoCgeFQ2ZnDt9JuBREWib1+l2sKBDtImpk8G/KsjDQT+39sp9UEljPsRjG6yvUaHrcY/cpHtJCf4DfZ3f66gZjJOFI4c/jfrCEEsNopae3TkxjYCPryXf7iij/ch1ja+37ncwxpHtWhbQWxs9NC0nCm8BrwOnv7Kf2fT8oP+dP21MeqXv3vBgrnrBFdng6urNq1jzDBCXHlPaG87hvgFrm3LU11VDVjzu3vEsNoJnV8No3hDISyJjMEO5ll4uy9a8GSSxtfob3S87841qyoe/ZE6+MPZuQgRNg73ZN1TyKw==</ds:SignatureValue>
+        <ds:SignatureValue></ds:SignatureValue>
         <ds:KeyInfo Id="KI-12345678-abcd-efgh-ijkl-1234567890ab">
           <wsse:SecurityTokenReference xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" wsu:Id="STR-12345678-abcd-efgh-ijkl-1234567890ab">
-            <wsse:KeyIdentifier EncodingType="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-soap-message-security-1.0#Base64Binary" ValueType="http://docs.oasis-open.org/wss/oasis-wss-soap-message-security-1.1#ThumbprintSHA1">TanSMLXyqbzJpCPWj1Ml6sLyTr4=</wsse:KeyIdentifier>
+            <wsse:KeyIdentifier EncodingType="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-soap-message-security-1.0#Base64Binary" ValueType="http://docs.oasis-open.org/wss/oasis-wss-soap-message-security-1.1#ThumbprintSHA1"></wsse:KeyIdentifier>
           </wsse:SecurityTokenReference>
         </ds:KeyInfo>
       </ds:Signature>
