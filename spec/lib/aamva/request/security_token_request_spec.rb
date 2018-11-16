@@ -1,3 +1,6 @@
+require 'rexml/document'
+require 'rexml/xpath'
+
 describe Aamva::Request::SecurityTokenRequest do
   before do
     allow(Time).to receive(:now).and_return(Time.utc(2017))
@@ -11,7 +14,23 @@ describe Aamva::Request::SecurityTokenRequest do
 
   describe '#body' do
     it 'should be a signed request body' do
-      expect(subject.body).to eq(Fixtures.security_token_request)
+      document = REXML::Document.new(subject.body)
+      public_key = REXML::XPath.first(document, '//wsse:BinarySecurityToken')
+      signature = REXML::XPath.first(document, '//ds:SignatureValue')
+      key_identifier = REXML::XPath.first(document, '//wsse:KeyIdentifier')
+
+      expect(public_key.text).to eq Base64.strict_encode64(Fixtures.aamva_public_key.to_der)
+      expect(key_identifier.text).to_not be_nil
+      expect(key_identifier.text).to_not be_empty
+      expect(signature.text).to_not be_nil
+      expect(signature.text).to_not be_empty
+
+      body_without_sig = subject.body.
+                         gsub(public_key.text, '').
+                         gsub(signature.text, '').
+                         gsub(key_identifier.text, '')
+
+      expect(body_without_sig).to eq(Fixtures.security_token_request)
     end
   end
 

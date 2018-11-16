@@ -2,13 +2,33 @@ require 'openssl'
 
 module Fixtures
   def self.aamva_private_key
-    raw = read_fixture_file('keys/aamva-private-key.example.pem')
-    OpenSSL::PKey::RSA.new(raw, 'sekret')
+    @aamva_private_key ||= OpenSSL::PKey::RSA.new(2048)
   end
 
   def self.aamva_public_key
-    raw = read_fixture_file('keys/aamva-public-key.example.crt')
-    OpenSSL::X509::Certificate.new(raw)
+    @aamva_public_key ||= begin
+      current_time = Time.now
+      cert = OpenSSL::X509::Certificate.new
+      cert.subject = cert.issuer = OpenSSL::X509::Name.parse('/C=BE/O=Test/OU=Test/CN=Test')
+      cert.not_before = current_time
+      cert.not_after = current_time + 365 * 24 * 60 * 60
+      cert.public_key = aamva_private_key.public_key
+      cert.serial = 0x0
+      cert.version = 2
+
+      ef = OpenSSL::X509::ExtensionFactory.new
+      ef.subject_certificate = cert
+      ef.issuer_certificate = cert
+      cert.extensions = [
+        ef.create_extension('basicConstraints', 'CA:TRUE', true),
+        ef.create_extension('subjectKeyIdentifier', 'hash'),
+      ]
+      cert.add_extension ef.create_extension('authorityKeyIdentifier',
+                                             'keyid:always,issuer:always')
+
+      cert.sign aamva_private_key, OpenSSL::Digest::SHA256.new
+      cert
+    end
   end
 
   def self.aamva_test_data

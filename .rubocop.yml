@@ -9,7 +9,8 @@ AllCops:
     - '**/Gemfile'
     - '**/Rakefile'
     - '**/Capfile'
-  TargetRubyVersion: 2.3
+    - '**/*.rb'
+  TargetRubyVersion: 2.5
   UseCache: true
 
 Metrics/AbcSize:
