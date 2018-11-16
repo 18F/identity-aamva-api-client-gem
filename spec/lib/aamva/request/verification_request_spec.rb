@@ -2,8 +2,8 @@ describe Aamva::Request::VerificationRequest do
   let(:applicant) do
     applicant = Aamva::Applicant.from_proofer_applicant(
       uuid: '1234-abcd-efgh',
-      first_name: 'Bob',
-      last_name: 'Ross',
+      first_name: 'Testy',
+      last_name: 'McTesterson',
       dob: '10/29/1942',
     )
     applicant.state_id_data.merge!(
