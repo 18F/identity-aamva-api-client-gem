@@ -4,9 +4,11 @@ require 'rexml/xpath'
 describe Aamva::Response::VerificationResponse do
   let(:status_code) { 200 }
   let(:response_body) { Fixtures.verification_response }
-  let(:return_code) { :ok }
   let(:http_response) do
-    Typhoeus::Response.new(code: status_code, body: response_body, return_code: return_code)
+    response = Faraday::Response.new
+    allow(response).to receive(:status).and_return(status_code)
+    allow(response).to receive(:body).and_return(response_body)
+    response
   end
   let(:verification_results) do
     {
@@ -23,17 +25,6 @@ describe Aamva::Response::VerificationResponse do
   end
 
   describe '#initialize' do
-    context 'when the request timed out' do
-      let(:return_code) { :operation_timedout }
-
-      it 'raises a timeout error' do
-        expect { subject }.to raise_error(
-          Proofer::TimeoutError,
-          'AAMVA timed out waiting for verification response'
-        )
-      end
-    end
-
     context 'with a non-200 status code' do
       let(:status_code) { 500 }
 
