@@ -1,9 +1,10 @@
 require 'base64'
 require 'erb'
+require 'faraday'
 require 'openssl'
 require 'securerandom'
 require 'time'
-require 'typhoeus'
+require 'typhoeus/adapters/faraday'
 require 'xmldsig'
 
 module Aamva
@@ -33,7 +34,12 @@ module Aamva
 
       def send
         Response::AuthenticationTokenResponse.new(
-          Typhoeus.post(url, body: body, headers: headers, timeout: timeout)
+          http_client.post(url, body, headers)
+        )
+      rescue Faraday::TimeoutError, Faraday::ConnectionFailed => err
+        raise(
+          ::Proofer::TimeoutError,
+          "AAMVA raised #{err.class} waiting for authentication token response",
         )
       end
 
@@ -45,6 +51,12 @@ module Aamva
 
       attr_accessor :hmac_secret
       attr_writer :security_context_token_identifier, :security_context_token_reference
+
+      def http_client
+        Faraday.new(request: { open_timeout: timeout, timeout: timeout }) do |faraday|
+          faraday.adapter :typhoeus
+        end
+      end
 
       def build_request_body
         renderer = ERB.new(request_body_template)

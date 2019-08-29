@@ -25,7 +25,6 @@ module Aamva
         @missing_attributes = []
         @verification_results = {}
         @http_response = http_response
-        handle_timeout_error
         handle_soap_error
         handle_http_error
         parse_response
@@ -54,14 +53,8 @@ module Aamva
 
       attr_reader :http_response, :missing_attributes
 
-      def handle_timeout_error
-        TimeoutErrorHandler.new(
-          http_response: http_response, context: :verification
-        ).call
-      end
-
       def handle_http_error
-        status = http_response.code
+        status = http_response.status
         return if status == 200
         raise VerificationError, "Unexpected status code in response: #{status}"
       end

@@ -1,8 +1,10 @@
 require 'erb'
+require 'faraday'
 require 'rexml/document'
 require 'rexml/xpath'
 require 'securerandom'
-require 'typhoeus'
+require 'typhoeus/adapters/faraday'
+
 
 module Aamva
   module Request
@@ -27,8 +29,10 @@ module Aamva
 
       def send
         Response::VerificationResponse.new(
-          Typhoeus.post(url, body: body, headers: headers, timeout: timeout)
+          http_client.post(url, body, headers)
         )
+      rescue Faraday::TimeoutError, Faraday::ConnectionFailed => err
+        raise ::Proofer::TimeoutError, "AAMVA raised #{err.class} waiting for verification response"
       end
 
       def self.verification_url
@@ -38,6 +42,12 @@ module Aamva
       private
 
       attr_reader :applicant, :transaction_id, :auth_token
+
+      def http_client
+        Faraday.new(request: { open_timeout: timeout, timeout: timeout }) do |faraday|
+          faraday.adapter :typhoeus
+        end
+      end
 
       def add_user_provided_data_to_body
         document = REXML::Document.new(body)

@@ -28,10 +28,12 @@ Gem::Specification.new do |s|
   s.rdoc_options = ['--charset=UTF-8']
 
   s.add_dependency('dotenv')
+  s.add_dependency('faraday')
   s.add_dependency('hashie')
   s.add_dependency('typhoeus')
   s.add_dependency('xmldsig')
 
+  s.add_development_dependency('irb')
   s.add_development_dependency('pry-byebug')
   s.add_development_dependency('rake')
   s.add_development_dependency('rspec')

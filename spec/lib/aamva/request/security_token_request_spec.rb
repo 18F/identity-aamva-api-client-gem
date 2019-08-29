@@ -52,4 +52,52 @@ describe Aamva::Request::SecurityTokenRequest do
       )
     end
   end
+
+  describe '#send' do
+    context 'when the request is successful' do
+      it 'returns a response object' do
+        connection = instance_double(Faraday::Connection)
+        faraday_response = instance_double(Faraday::Response)
+        response = instance_double(Aamva::Response::SecurityTokenResponse)
+
+        expect(Faraday).to receive(:new).and_return(connection)
+        expect(connection).to receive(:post).and_return(faraday_response)
+        expect(Aamva::Response::SecurityTokenResponse).to receive(:new).
+          with(faraday_response).
+          and_return(response)
+
+        result = subject.send
+
+        expect(result).to eq(response)
+      end
+    end
+
+    context 'when the request times out' do
+      it 'raises an error' do
+        connection = instance_double(Faraday::Connection)
+
+        expect(Faraday).to receive(:new).and_return(connection)
+        expect(connection).to receive(:post).and_raise(Faraday::TimeoutError.new)
+
+        expect { subject.send }.to raise_error(
+          ::Proofer::TimeoutError,
+          'AAMVA raised Faraday::TimeoutError waiting for security token response',
+        )
+      end
+    end
+
+    context 'when the connection fails' do
+      it 'raises an error' do
+        connection = instance_double(Faraday::Connection)
+
+        expect(Faraday).to receive(:new).and_return(connection)
+        expect(connection).to receive(:post).and_raise(Faraday::ConnectionFailed.new('error'))
+
+        expect { subject.send }.to raise_error(
+          ::Proofer::TimeoutError,
+          'AAMVA raised Faraday::ConnectionFailed waiting for security token response',
+        )
+      end
+    end
+  end
 end

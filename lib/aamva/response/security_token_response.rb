@@ -8,7 +8,7 @@ module Aamva
 
       def initialize(http_response)
         @http_response = http_response
-        handle_timeout_error
+        #handle_timeout_error
         handle_soap_error
         handle_http_error
         parse_response
@@ -35,7 +35,7 @@ module Aamva
       end
 
       def handle_http_error
-        status = http_response.code
+        status = http_response.status
         return if status == 200
         raise AuthenticationError, "Unexpected status code in response: #{status}"
       end
