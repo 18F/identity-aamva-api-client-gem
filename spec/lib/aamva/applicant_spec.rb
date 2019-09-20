@@ -5,7 +5,7 @@ describe Aamva::Applicant do
       first_name: 'Testy',
       last_name: 'McTesterson',
       dob: '10/29/1942',
-      state_id_number: '123456789',
+      state_id_number: '123-456-789',
       state_id_jurisdiction: 'VA',
       state_id_type: 'drivers_license',
     }
@@ -20,7 +20,7 @@ describe Aamva::Applicant do
       expect(aamva_applicant.last_name).to eq(proofer_applicant[:last_name])
       expect(aamva_applicant.dob).to eq('1942-10-29')
       expect(aamva_applicant.state_id_data.state_id_number).to eq(
-        proofer_applicant[:state_id_number]
+        proofer_applicant[:state_id_number].gsub(/[^\w\d]/, '')
       )
       expect(aamva_applicant.state_id_data.state_id_jurisdiction).to eq(
         proofer_applicant[:state_id_jurisdiction]
