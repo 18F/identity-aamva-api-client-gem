@@ -33,7 +33,7 @@ module Aamva
 
     private_class_method def self.format_state_id_data(applicant)
       {
-        state_id_number: applicant[:state_id_number].gsub(/[^\w\d]/, ''),
+        state_id_number: applicant(:state_id_number)&.gsub(/[^\w\d]/, ''),
         state_id_jurisdiction: applicant[:state_id_jurisdiction],
         state_id_type: applicant[:state_id_type],
       }
