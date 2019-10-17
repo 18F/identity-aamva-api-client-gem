@@ -37,10 +37,8 @@ module Aamva
           http_client.post(url, body, headers)
         )
       rescue Faraday::TimeoutError, Faraday::ConnectionFailed => err
-        raise(
-          ::Proofer::TimeoutError,
-          "AAMVA raised #{err.class} waiting for authentication token response",
-        )
+        message = "AAMVA raised #{err.class} waiting for authentication token response: #{err.message}"
+        raise ::Proofer::TimeoutError, message
       end
 
       def self.auth_url
