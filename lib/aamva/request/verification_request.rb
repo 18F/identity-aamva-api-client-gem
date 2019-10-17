@@ -32,7 +32,8 @@ module Aamva
           http_client.post(url, body, headers)
         )
       rescue Faraday::TimeoutError, Faraday::ConnectionFailed => err
-        raise ::Proofer::TimeoutError, "AAMVA raised #{err.class} waiting for verification response"
+        message = "AAMVA raised #{err.class} waiting for verification response: #{err.message}"
+        raise ::Proofer::TimeoutError, message
       end
 
       def self.verification_url

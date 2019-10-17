@@ -81,7 +81,7 @@ describe Aamva::Request::SecurityTokenRequest do
 
         expect { subject.send }.to raise_error(
           ::Proofer::TimeoutError,
-          'AAMVA raised Faraday::TimeoutError waiting for security token response',
+          'AAMVA raised Faraday::TimeoutError waiting for security token response: timeout',
         )
       end
     end
@@ -95,7 +95,7 @@ describe Aamva::Request::SecurityTokenRequest do
 
         expect { subject.send }.to raise_error(
           ::Proofer::TimeoutError,
-          'AAMVA raised Faraday::ConnectionFailed waiting for security token response',
+          'AAMVA raised Faraday::ConnectionFailed waiting for security token response: error',
         )
       end
     end
