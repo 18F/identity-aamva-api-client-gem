@@ -40,7 +40,7 @@ describe Aamva::Request::SecurityTokenRequest do
         'SOAPAction' =>
           '"http://aamva.org/authentication/3.1.0/IAuthenticationService/Authenticate"',
         'Content-Type' => 'application/soap+xml;charset=UTF-8',
-        'Content-Length' => subject.body.length.to_s
+        'Content-Length' => subject.body.length.to_s,
       )
     end
   end
@@ -48,7 +48,7 @@ describe Aamva::Request::SecurityTokenRequest do
   describe '#url' do
     it 'should be the AAMVA authentication url' do
       expect(subject.url).to eq(
-        'https://authentication-cert.aamva.org/Authentication/Authenticate.svc'
+        'https://authentication-cert.example.com/Authentication/Authenticate.svc',
       )
     end
   end
