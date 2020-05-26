@@ -40,7 +40,7 @@ describe Aamva::Request::AuthenticationTokenRequest do
   describe '#url' do
     it 'should be the AAMVA authentication url' do
       expect(subject.url).to eq(
-        'https://authentication-cert.aamva.org/Authentication/Authenticate.svc'
+        'https://authentication-cert.example.com/Authentication/Authenticate.svc'
       )
     end
   end
@@ -73,7 +73,7 @@ describe Aamva::Request::AuthenticationTokenRequest do
 
         expect { subject.send }.to raise_error(
           ::Proofer::TimeoutError,
-          'AAMVA raised Faraday::TimeoutError waiting for authentication token response: timeout',
+          'AAMVA raised Faraday::TimeoutError waiting for authentication token response: timeout'
         )
       end
     end
@@ -87,7 +87,7 @@ describe Aamva::Request::AuthenticationTokenRequest do
 
         expect { subject.send }.to raise_error(
           ::Proofer::TimeoutError,
-          'AAMVA raised Faraday::ConnectionFailed waiting for authentication token response: error',
+          'AAMVA raised Faraday::ConnectionFailed waiting for authentication token response: error'
         )
       end
     end
