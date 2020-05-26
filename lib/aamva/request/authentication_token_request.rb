@@ -34,10 +34,10 @@ module Aamva
 
       def send
         Response::AuthenticationTokenResponse.new(
-          http_client.post(url, body, headers)
+          http_client.post(url, body, headers),
         )
-      rescue Faraday::TimeoutError, Faraday::ConnectionFailed => err
-        message = "AAMVA raised #{err.class} waiting for authentication token response: #{err.message}"
+      rescue Faraday::TimeoutError, Faraday::ConnectionFailed => e
+        message = "AAMVA raised #{e.class} waiting for authentication token response: #{e.message}"
         raise ::Proofer::TimeoutError, message
       end
 
@@ -78,7 +78,7 @@ module Aamva
       def request_body_template
         template_file_path = File.join(
           File.dirname(__FILE__),
-          'templates/authentication_token.xml.erb'
+          'templates/authentication_token.xml.erb',
         )
         File.read(template_file_path)
       end
