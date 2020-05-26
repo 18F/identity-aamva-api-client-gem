@@ -9,7 +9,7 @@ describe Aamva::Request::AuthenticationTokenRequest do
       security_context_token_identifier: security_context_token_identifier,
       security_context_token_reference: security_context_token_reference,
       client_hmac_secret: client_hmac_secret,
-      server_hmac_secret: server_hmac_secret
+      server_hmac_secret: server_hmac_secret,
     )
   end
 
@@ -32,7 +32,7 @@ describe Aamva::Request::AuthenticationTokenRequest do
         'SOAPAction' =>
           '"http://aamva.org/authentication/3.1.0/IAuthenticationService/Authenticate"',
         'Content-Type' => 'application/soap+xml;charset=UTF-8',
-        'Content-Length' => subject.body.length.to_s
+        'Content-Length' => subject.body.length.to_s,
       )
     end
   end
@@ -40,7 +40,7 @@ describe Aamva::Request::AuthenticationTokenRequest do
   describe '#url' do
     it 'should be the AAMVA authentication url' do
       expect(subject.url).to eq(
-        'https://authentication-cert.example.com/Authentication/Authenticate.svc'
+        'https://authentication-cert.example.com/Authentication/Authenticate.svc',
       )
     end
   end
@@ -73,7 +73,7 @@ describe Aamva::Request::AuthenticationTokenRequest do
 
         expect { subject.send }.to raise_error(
           ::Proofer::TimeoutError,
-          'AAMVA raised Faraday::TimeoutError waiting for authentication token response: timeout'
+          'AAMVA raised Faraday::TimeoutError waiting for authentication token response: timeout',
         )
       end
     end
@@ -87,7 +87,7 @@ describe Aamva::Request::AuthenticationTokenRequest do
 
         expect { subject.send }.to raise_error(
           ::Proofer::TimeoutError,
-          'AAMVA raised Faraday::ConnectionFailed waiting for authentication token response: error'
+          'AAMVA raised Faraday::ConnectionFailed waiting for authentication token response: error',
         )
       end
     end
