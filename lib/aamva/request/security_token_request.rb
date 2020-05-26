@@ -17,9 +17,9 @@ module Aamva
       attr_reader :body, :headers, :url
 
       def initialize
+        @url = SecurityTokenRequest.auth_url
         @body = build_request_body
         @headers = build_request_headers
-        @url = SecurityTokenRequest.auth_url
       end
 
       def nonce
@@ -28,7 +28,7 @@ module Aamva
 
       def send
         Response::SecurityTokenResponse.new(
-          http_client.post(url, body, headers)
+          http_client.post(url, body, headers),
         )
       rescue Faraday::TimeoutError, Faraday::ConnectionFailed => err
         message = "AAMVA raised #{err.class} waiting for security token response: #{err.message}"

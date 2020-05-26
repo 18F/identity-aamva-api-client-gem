@@ -2,7 +2,7 @@
   <soap:Header>
     <Action xmlns="http://www.w3.org/2005/08/addressing">http://schemas.xmlsoap.org/ws/2005/02/trust/RST/SCT</Action>
     <MessageID xmlns="http://www.w3.org/2005/08/addressing">urn:uuid:<%= uuid %></MessageID>
-    <To xmlns="http://www.w3.org/2005/08/addressing" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" wsu:Id="_<%= message_to_uuid %>">https://authentication-cert.aamva.org/Authentication/Authenticate.svc</To>
+    <To xmlns="http://www.w3.org/2005/08/addressing" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" wsu:Id="_<%= message_to_uuid %>"><%= url %></To>
     <ReplyTo xmlns="http://www.w3.org/2005/08/addressing">
       <Address>http://www.w3.org/2005/08/addressing/anonymous</Address>
     </ReplyTo>
@@ -51,7 +51,7 @@
       <wst:RequestType>http://schemas.xmlsoap.org/ws/2005/02/trust/Issue</wst:RequestType>
       <wsp:AppliesTo xmlns:wsp="http://www.w3.org/ns/ws-policy">
         <wsa:EndpointReference xmlns:wsa="http://www.w3.org/2005/08/addressing">
-          <wsa:Address>https://authentication-cert.aamva.org/Authentication/Authenticate.svc</wsa:Address>
+          <wsa:Address><%= url %></wsa:Address>
         </wsa:EndpointReference>
       </wsp:AppliesTo>
       <wst:Lifetime xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">

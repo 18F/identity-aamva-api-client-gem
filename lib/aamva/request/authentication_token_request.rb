@@ -27,9 +27,9 @@ module Aamva
         self.security_context_token_identifier = security_context_token_identifier
         self.security_context_token_reference = security_context_token_reference
         self.hmac_secret = HmacSecret.new(client_hmac_secret, server_hmac_secret).psha1
+        @url = AuthenticationTokenRequest.auth_url
         @body = build_request_body
         @headers = build_request_headers
-        @url = AuthenticationTokenRequest.auth_url
       end
 
       def send
