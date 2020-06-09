@@ -1,7 +1,15 @@
 describe Aamva::AuthenticationClient do
   let(:current_time) { Time.utc(2017) }
-  let(:security_token_request_stub) { stub_security_token_request }
-  let(:auth_token_request_stub) { stub_authentication_token_request }
+  let(:security_token_request_stub) do
+    stub_request(:post, Aamva::Request::SecurityTokenRequest.auth_url).
+      with(body: Fixtures.security_token_request).
+      to_return(body: Fixtures.security_token_response, status: 200)
+  end
+  let(:auth_token_request_stub) do
+    stub_request(:post, Aamva::Request::AuthenticationTokenRequest.auth_url).
+      with(body: Fixtures.authentication_token_request).
+      to_return(body: Fixtures.authentication_token_response, status: 200)
+  end
 
   let(:security_context_token_identifier) { 'sct-token-identifier' }
   let(:security_context_token_reference) { 'sct-token-reference' }

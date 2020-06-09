@@ -56,42 +56,31 @@ describe Aamva::Request::SecurityTokenRequest do
   describe '#send' do
     context 'when the request is successful' do
       it 'returns a response object' do
-        connection = instance_double(Faraday::Connection)
-        faraday_response = instance_double(Faraday::Response)
-        response = instance_double(Aamva::Response::SecurityTokenResponse)
-
-        expect(Faraday).to receive(:new).and_return(connection)
-        expect(connection).to receive(:post).and_return(faraday_response)
-        expect(Aamva::Response::SecurityTokenResponse).to receive(:new).
-          with(faraday_response).
-          and_return(response)
+        stub_request(:post, Aamva::Request::SecurityTokenRequest.auth_url).
+          to_return(body: Fixtures.security_token_response, status: 200)
 
         result = subject.send
 
-        expect(result).to eq(response)
+        expect(result.nonce).to eq('MTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTE=')
       end
     end
 
     context 'when the request times out' do
       it 'raises an error' do
-        connection = instance_double(Faraday::Connection)
-
-        expect(Faraday).to receive(:new).and_return(connection)
-        expect(connection).to receive(:post).and_raise(Faraday::TimeoutError.new)
+        stub_request(:post, Aamva::Request::SecurityTokenRequest.auth_url).
+          to_timeout
 
         expect { subject.send }.to raise_error(
           ::Proofer::TimeoutError,
-          'AAMVA raised Faraday::TimeoutError waiting for security token response: timeout',
+          'AAMVA raised Faraday::TimeoutError waiting for security token response: request timed out',
         )
       end
     end
 
     context 'when the connection fails' do
       it 'raises an error' do
-        connection = instance_double(Faraday::Connection)
-
-        expect(Faraday).to receive(:new).and_return(connection)
-        expect(connection).to receive(:post).and_raise(Faraday::ConnectionFailed.new('error'))
+        stub_request(:post, Aamva::Request::SecurityTokenRequest.auth_url).
+          to_raise(Faraday::ConnectionFailed.new('error'))
 
         expect { subject.send }.to raise_error(
           ::Proofer::TimeoutError,
