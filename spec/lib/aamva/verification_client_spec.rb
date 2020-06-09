@@ -20,10 +20,11 @@ describe Aamva::VerificationClient do
       allow(auth_client).to receive(:fetch_token).and_return('ThisIsTheToken')
       allow(Aamva::AuthenticationClient).to receive(:new).and_return(auth_client)
 
-      verification_stub = stub_verification_request
-      verification_stub.with do |request|
-        xml_text_at_path(request.body, '//ns:token').gsub(/\s/, '') == 'ThisIsTheToken'
-      end
+      verification_stub = stub_request(:post, Aamva::Request::VerificationRequest.verification_url).
+        to_return(body: Fixtures.verification_response, status: 200).
+        with do |request|
+          xml_text_at_path(request.body, '//ns:token').gsub(/\s/, '') == 'ThisIsTheToken'
+        end
 
       subject.send_verification_request(applicant: applicant, session_id: '1234-abcd-efgh')
 
@@ -35,7 +36,8 @@ describe Aamva::VerificationClient do
         auth_client = instance_double(Aamva::AuthenticationClient)
         allow(auth_client).to receive(:fetch_token).and_return('ThisIsTheToken')
         allow(Aamva::AuthenticationClient).to receive(:new).and_return(auth_client)
-        stub_verification_request
+        stub_request(:post, Aamva::Request::VerificationRequest.verification_url).
+          to_return(body: Fixtures.verification_response, status: 200)
 
         response = subject.send_verification_request(
           applicant: applicant,
@@ -53,12 +55,12 @@ describe Aamva::VerificationClient do
         allow(auth_client).to receive(:fetch_token).and_return('ThisIsTheToken')
         allow(Aamva::AuthenticationClient).to receive(:new).and_return(auth_client)
 
-        verification_request = stub_verification_request
-        verification_request.to_return(body: modify_xml_at_xpath(
-          Fixtures.verification_response,
-          '//PersonBirthDateMatchIndicator',
-          'false'
-        ))
+        stub_request(:post, Aamva::Request::VerificationRequest.verification_url).
+          to_return(status: 200, body: modify_xml_at_xpath(
+            Fixtures.verification_response,
+            '//PersonBirthDateMatchIndicator',
+            'false'
+          ))
 
         response = subject.send_verification_request(
           applicant: applicant,
@@ -66,7 +68,7 @@ describe Aamva::VerificationClient do
         )
 
         expect(response).to be_a Aamva::Response::VerificationResponse
-        expect(response.success?).to eq(true)
+        expect(response.success?).to eq(false)
       end
     end
   end
