@@ -65,7 +65,19 @@ describe Aamva::Request::SecurityTokenRequest do
       end
     end
 
-    context 'when the request times out' do
+    context 'when the request times out once' do
+      it 'retries and tries again' do
+        stub_request(:post, Aamva::Request::SecurityTokenRequest.auth_url).
+          to_timeout.
+          to_return(body: Fixtures.security_token_response, status: 200)
+
+        result = subject.send
+
+        expect(result.nonce).to eq('MTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTE=')
+      end
+    end
+
+    context 'when the request times out a second time' do
       it 'raises an error' do
         stub_request(:post, Aamva::Request::SecurityTokenRequest.auth_url).
           to_timeout

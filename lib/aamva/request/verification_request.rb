@@ -3,8 +3,8 @@ require 'faraday'
 require 'rexml/document'
 require 'rexml/xpath'
 require 'securerandom'
-require 'typhoeus/adapters/faraday'
 require 'retries'
+require 'typhoeus/adapters/faraday'
 
 module Aamva
   module Request

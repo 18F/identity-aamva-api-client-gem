@@ -1,6 +1,7 @@
 require 'erb'
 require 'faraday'
 require 'openssl'
+require 'retries'
 require 'securerandom'
 require 'time'
 require 'typhoeus/adapters/faraday'
@@ -27,9 +28,11 @@ module Aamva
       end
 
       def send
-        Response::SecurityTokenResponse.new(
-          http_client.post(url, body, headers),
-        )
+        with_retries(max_tries: 2, rescue: [Faraday::TimeoutError, Faraday::ConnectionFailed]) do
+          Response::SecurityTokenResponse.new(
+            http_client.post(url, body, headers),
+          )
+        end
       rescue Faraday::TimeoutError, Faraday::ConnectionFailed => err
         message = "AAMVA raised #{err.class} waiting for security token response: #{err.message}"
         raise ::Proofer::TimeoutError, message
