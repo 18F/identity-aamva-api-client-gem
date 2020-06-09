@@ -3,8 +3,8 @@ require 'faraday'
 require 'rexml/document'
 require 'rexml/xpath'
 require 'securerandom'
+require 'retries'
 require 'typhoeus/adapters/faraday'
-
 
 module Aamva
   module Request
@@ -28,9 +28,11 @@ module Aamva
       end
 
       def send
-        Response::VerificationResponse.new(
-          http_client.post(url, body, headers)
-        )
+        with_retries(max_tries: 2, rescue: [Faraday::TimeoutError, Faraday::ConnectionFailed]) do
+          Response::VerificationResponse.new(
+            http_client.post(url, body, headers)
+          )
+        end
       rescue Faraday::TimeoutError, Faraday::ConnectionFailed => err
         message = "AAMVA raised #{err.class} waiting for verification response: #{err.message}"
         raise ::Proofer::TimeoutError, message
