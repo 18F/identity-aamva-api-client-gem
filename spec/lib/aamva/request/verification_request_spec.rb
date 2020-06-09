@@ -68,7 +68,19 @@ describe Aamva::Request::VerificationRequest do
       end
     end
 
-    context 'when the request times out' do
+    context 'when the request times out once' do
+      it 'retries and tries again' do
+        stub_request(:post, Aamva::Request::VerificationRequest.verification_url).
+          to_timeout.
+          to_return(body: Fixtures.verification_response, status: 200)
+
+        result = subject.send
+
+        expect(result.success?).to eq(true)
+      end
+    end
+
+    context 'when the request times out a second time' do
       it 'raises an error' do
         stub_request(:post, Aamva::Request::VerificationRequest.verification_url).
           to_timeout
