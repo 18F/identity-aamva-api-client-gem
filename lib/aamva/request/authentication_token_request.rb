@@ -5,7 +5,6 @@ require 'openssl'
 require 'retries'
 require 'securerandom'
 require 'time'
-require 'typhoeus/adapters/faraday'
 require 'xmldsig'
 
 module Aamva
@@ -55,7 +54,7 @@ module Aamva
 
       def http_client
         Faraday.new(request: { open_timeout: timeout, timeout: timeout }) do |faraday|
-          faraday.adapter :typhoeus
+          faraday.adapter :net_http
         end
       end
 

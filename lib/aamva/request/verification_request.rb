@@ -4,7 +4,6 @@ require 'rexml/document'
 require 'rexml/xpath'
 require 'securerandom'
 require 'retries'
-require 'typhoeus/adapters/faraday'
 
 module Aamva
   module Request
@@ -48,7 +47,7 @@ module Aamva
 
       def http_client
         Faraday.new(request: { open_timeout: timeout, timeout: timeout }) do |faraday|
-          faraday.adapter :typhoeus
+          faraday.adapter :net_http
         end
       end
 

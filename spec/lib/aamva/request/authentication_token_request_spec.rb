@@ -76,7 +76,7 @@ describe Aamva::Request::AuthenticationTokenRequest do
 
         expect { subject.send }.to raise_error(
           ::Proofer::TimeoutError,
-          'AAMVA raised Faraday::TimeoutError waiting for authentication token response: request timed out',
+          'AAMVA raised Faraday::ConnectionFailed waiting for authentication token response: execution expired',
         )
       end
     end

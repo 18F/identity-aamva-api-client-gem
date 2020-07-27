@@ -31,7 +31,6 @@ Gem::Specification.new do |s|
   s.add_dependency('faraday')
   s.add_dependency('hashie')
   s.add_dependency('retries')
-  s.add_dependency('typhoeus')
   s.add_dependency('xmldsig')
 
   s.add_development_dependency('irb')

@@ -30,7 +30,7 @@ response.vendor_resp #=> An AAMVA::Response::VerificationResponse object
 
 ### Unit tests
 
-To run the unit tests, run `rspec spec/lib/`.
+To run the unit tests, run `bundle exec rspec spec/lib/`.
 
 ### Integration tests
 
