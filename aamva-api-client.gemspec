@@ -33,6 +33,9 @@ Gem::Specification.new do |s|
   s.add_dependency('retries')
   s.add_dependency('xmldsig')
 
+  # This should be identity-proofer when we rename what the gem exports itself as
+  s.add_dependency('proofer', '>= 2.7.1')
+
   s.add_development_dependency('irb')
   s.add_development_dependency('pry-byebug')
   s.add_development_dependency('rake')
