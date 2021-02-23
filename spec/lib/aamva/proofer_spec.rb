@@ -102,10 +102,17 @@ describe Aamva::Proofer do
         )
       end
 
+      let(:transaction_locator_id) { SecureRandom.uuid }
+      let(:verification_response) do
+        XmlHelpers.modify_xml_at_xpath(super(), '//TransactionLocatorID', transaction_locator_id)
+      end
+
       it 'the result is successful' do
         result = subject.proof(state_id_data.merge(applicant_data))
         expect(result.success?).to eq(true)
         expect(result.errors).to be_empty
+
+        expect(result.transaction_id).to eq(transaction_locator_id)
       end
     end
   end

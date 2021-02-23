@@ -157,6 +157,27 @@ describe Aamva::Response::VerificationResponse do
     end
   end
 
+  describe '#transaction_locator_id' do
+    let(:transaction_locator_id) { SecureRandom.uuid }
+    let(:response_body) do
+      modify_match_indicator(Fixtures.verification_response, 'TransactionLocatorID', transaction_locator_id)
+    end
+
+    it 'is the TransactionLocatorID from the response' do
+      expect(subject.transaction_locator_id).to eq(transaction_locator_id)
+    end
+
+    context 'when there is no TransactionLocatorID' do
+      let(:response_body) do
+        delete_match_indicator(Fixtures.verification_response, 'TransactionLocatorID')
+      end
+
+      it 'is nil' do
+        expect(subject.transaction_locator_id).to be_nil
+      end
+    end
+  end
+
   def modify_match_indicator(xml, name, value)
     modify_xml_at_xpath(xml, "//#{name}", value)
   end

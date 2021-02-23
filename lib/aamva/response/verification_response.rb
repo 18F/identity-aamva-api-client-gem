@@ -19,7 +19,7 @@ module Aamva
         first_name
       ].freeze
 
-      attr_reader :verification_results
+      attr_reader :verification_results, :transaction_locator_id
 
       def initialize(http_response)
         @missing_attributes = []
@@ -85,6 +85,8 @@ module Aamva
             verification_results[attribute_name] = false
           end
         end
+
+        @transaction_locator_id = node_for_match_indicator('TransactionLocatorID')&.text
       end
 
       def rexml_document

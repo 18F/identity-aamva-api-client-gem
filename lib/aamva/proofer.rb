@@ -19,6 +19,7 @@ module Aamva
     def aamva_proof(applicant, result)
       aamva_applicant = Aamva::Applicant.from_proofer_applicant(OpenStruct.new(applicant))
       response = Aamva::VerificationClient.new.send_verification_request(applicant: aamva_applicant)
+      result.transaction_id = response.transaction_locator_id
       unless response.success?
         response.verification_results.each do |attribute, v_result|
           result.add_error(attribute.to_sym, 'UNVERIFIED') if v_result == false
