@@ -76,6 +76,14 @@ module Fixtures
     read_fixture_file('responses/verification_response.xml')
   end
 
+  def self.verification_response_namespaced_success
+    read_fixture_file('responses/verification_response_namespaced_success.xml')
+  end
+
+  def self.verification_response_namespaced_failure
+    read_fixture_file('responses/verification_response_namespaced_failure.xml')
+  end
+
   private_class_method def self.read_fixture_file(path)
     fullpath = File.join(
       File.dirname(__FILE__),

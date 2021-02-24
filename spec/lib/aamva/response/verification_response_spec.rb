@@ -49,9 +49,17 @@ describe Aamva::Response::VerificationResponse do
   end
 
   describe '#reasons' do
-    context 'when all attiutes are verified' do
+    context 'when all attributes are verified' do
       it 'returns an empty array' do
         expect(subject.reasons).to eq([])
+      end
+
+      context 'with a namespaced XML body' do
+        let(:response_body) { Fixtures.verification_response_namespaced_success }
+
+        it 'returns an empty array' do
+          expect(subject.reasons).to eq([])
+        end
       end
     end
 
@@ -82,8 +90,21 @@ describe Aamva::Response::VerificationResponse do
         )
       end
 
-      it 'returns an array with the reasons verifiation failed' do
+      it 'returns an array with the reasons verification failed' do
         expect(subject.reasons).to eq(['Failed to verify dob', 'Response was missing first_name'])
+      end
+
+      context 'with a namespaced XML response' do
+        let(:response_body) { Fixtures.verification_response_namespaced_failure }
+
+        it 'returns an array with the reasons verification failed' do
+          expect(subject.reasons).to eq([
+            'Failed to verify state_id_number',
+            'Response was missing dob',
+            'Response was missing last_name',
+            'Response was missing first_name'
+          ])
+        end
       end
     end
   end
@@ -103,6 +124,11 @@ describe Aamva::Response::VerificationResponse do
       end
 
       it { expect(subject.success?).to eq(true) }
+
+      context 'with a namespaced XML response' do
+        let(:response_body) { Fixtures.verification_response_namespaced_success }
+        it { expect(subject.success?).to eq(true) }
+      end
     end
 
     context 'when required attributes are not verified' do
@@ -174,6 +200,22 @@ describe Aamva::Response::VerificationResponse do
 
       it 'is nil' do
         expect(subject.transaction_locator_id).to be_nil
+      end
+    end
+
+    context 'with a namespaced XML response' do
+      let(:response_body) { Fixtures.verification_response_namespaced_success }
+
+      it 'is the value from the response' do
+        expect(subject.transaction_locator_id).to eq('transaction-locator-id-67890')
+      end
+    end
+
+    context 'with a namespaced XML failure response' do
+      let(:response_body) { Fixtures.verification_response_namespaced_failure }
+
+      it 'is the value from the response' do
+        expect(subject.transaction_locator_id).to eq('transaction-locator-id-12345')
       end
     end
   end
