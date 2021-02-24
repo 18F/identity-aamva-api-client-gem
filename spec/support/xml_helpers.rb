@@ -2,6 +2,8 @@ require 'rexml/document'
 require 'rexml/xpath'
 
 module XmlHelpers
+  module_function
+
   def xml_text_at_path(xml, xpath)
     document = REXML::Document.new(xml)
     REXML::XPath.first(document, xpath).text
@@ -19,5 +21,4 @@ module XmlHelpers
     element.parent.delete(element)
     document.to_s
   end
-  module_function :delete_xml_at_xpath
 end

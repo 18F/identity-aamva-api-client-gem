@@ -7,8 +7,6 @@ describe Aamva::Proofer do
       OpenStruct.new(state_id_data)
     )
   end
-  let(:aamva_response) { instance_double(Aamva::Response::VerificationResponse) }
-  let(:verification_client) { Aamva::VerificationClient.new }
   let(:state_id_data) do
     {
       state_id_number: '1234567890',
@@ -16,7 +14,6 @@ describe Aamva::Proofer do
       state_id_type: 'drivers_license',
     }
   end
-  let(:success) { true }
   let(:verification_results) do
     {
       state_id_number: true,
@@ -35,18 +32,21 @@ describe Aamva::Proofer do
     described_class.new
   end
 
+  let(:verification_response) { Fixtures.verification_response }
+
   before do
-    allow(Aamva::VerificationClient).to receive(:new).and_return(verification_client)
-    allow(verification_client).to receive(:send_verification_request).with(
-      applicant: aamva_applicant
-    ).and_return(aamva_response)
-    allow(aamva_response).to receive(:success?).and_return(success)
-    allow(aamva_response).to receive(:verification_results).and_return(verification_results)
+    stub_request(:post, ENV['AAMVA_AUTH_URL']).
+      to_return(
+        { body: Fixtures.security_token_response },
+        { body: Fixtures.authentication_token_response },
+      )
+    stub_request(:post, ENV['AAMVA_VERIFICATION_URL']).
+      to_return(body: verification_response)
   end
 
   describe '#aamva_proof' do
     context 'when verification is successful' do
-      it 'the result be successful' do
+      it 'the result is successful' do
         subject.aamva_proof(state_id_data, result)
 
         expect(result.success?).to eq(true)
@@ -55,26 +55,28 @@ describe Aamva::Proofer do
     end
 
     context 'when verification is unsuccessful' do
-      let(:success) { false }
-      let(:verification_results) { super().merge(dob: false, zipcode: false) }
+      let(:verification_response) do
+        XmlHelpers.modify_xml_at_xpath(super(), '//PersonBirthDateMatchIndicator', 'false')
+      end
 
       it 'the result should be failed' do
         subject.aamva_proof(state_id_data, result)
 
         expect(result.failed?).to eq(true)
-        expect(result.errors).to eq(dob: ['UNVERIFIED'], zipcode: ['UNVERIFIED'])
+        expect(result.errors).to eq(dob: ['UNVERIFIED'])
       end
     end
 
     context 'when verification attributes are missing' do
-      let(:success) { false }
-      let(:verification_results) { super().merge(dob: false, zipcode: nil) }
+      let(:verification_response) do
+        XmlHelpers.delete_xml_at_xpath(super(), '//PersonBirthDateMatchIndicator')
+      end
 
       it 'the result should be failed' do
         subject.aamva_proof(state_id_data, result)
 
         expect(result.failed?).to eq(true)
-        expect(result.errors).to eq(dob: ['UNVERIFIED'], zipcode: ['MISSING'])
+        expect(result.errors).to eq(dob: ['MISSING'])
       end
     end
   end
@@ -100,10 +102,17 @@ describe Aamva::Proofer do
         )
       end
 
-      it 'the result be successful' do
+      let(:transaction_locator_id) { SecureRandom.uuid }
+      let(:verification_response) do
+        XmlHelpers.modify_xml_at_xpath(super(), '//TransactionLocatorID', transaction_locator_id)
+      end
+
+      it 'the result is successful' do
         result = subject.proof(state_id_data.merge(applicant_data))
         expect(result.success?).to eq(true)
         expect(result.errors).to be_empty
+
+        expect(result.transaction_id).to eq(transaction_locator_id)
       end
     end
   end
