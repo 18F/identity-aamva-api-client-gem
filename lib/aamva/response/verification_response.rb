@@ -70,14 +70,13 @@ module Aamva
         raise VerificationError, error_handler.error_message
       end
 
-      def node_for_match_indicator(match_indicator_name, namespace: nil)
-        REXML::XPath.first(rexml_document, "//#{match_indicator_name}") ||
-          (namespace && REXML::XPath.first(rexml_document, "//ns:#{match_indicator_name}", ns: namespace))
+      def node_for_match_indicator(match_indicator_name)
+        REXML::XPath.first(rexml_document, "//#{match_indicator_name}")
       end
 
       def parse_response
         VERIFICATION_ATTRIBUTES_MAP.each_pair do |match_indicator_name, attribute_name|
-          attribute_node = node_for_match_indicator(match_indicator_name, namespace: 'http://aamva.org/niem/extensions/1.0')
+          attribute_node = node_for_match_indicator(match_indicator_name)
           if attribute_node.nil?
             handle_missing_attribute(attribute_name)
           elsif attribute_node.text == 'true'
@@ -88,8 +87,8 @@ module Aamva
         end
 
         @transaction_locator_id = (
-          node_for_match_indicator('TransactionLocatorId', namespace: 'http://aamva.org/dldv/wsdl/2.1') ||
-            node_for_match_indicator('TransactionLocatorID', namespace: 'http://aamva.org/dldv/wsdl/2.1')
+          node_for_match_indicator('TransactionLocatorId') ||
+            node_for_match_indicator('TransactionLocatorID')
         )&.text
       end
 
