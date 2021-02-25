@@ -86,7 +86,10 @@ module Aamva
           end
         end
 
-        @transaction_locator_id = node_for_match_indicator('TransactionLocatorID')&.text
+        @transaction_locator_id = (
+          node_for_match_indicator('TransactionLocatorId') ||
+            node_for_match_indicator('TransactionLocatorID')
+        )&.text
       end
 
       def rexml_document
