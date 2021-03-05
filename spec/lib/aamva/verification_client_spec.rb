@@ -14,19 +14,21 @@ describe Aamva::VerificationClient do
     applicant
   end
 
+  subject(:verification_client) { described_class.new(example_config) }
+
   describe '#send_verification_request' do
     it 'should get the auth token from the auth client' do
       auth_client = instance_double(Aamva::AuthenticationClient)
       allow(auth_client).to receive(:fetch_token).and_return('ThisIsTheToken')
       allow(Aamva::AuthenticationClient).to receive(:new).and_return(auth_client)
 
-      verification_stub = stub_request(:post, Aamva::Request::VerificationRequest.verification_url).
+      verification_stub = stub_request(:post, example_config.verification_url).
         to_return(body: Fixtures.verification_response, status: 200).
         with do |request|
           xml_text_at_path(request.body, '//ns:token').gsub(/\s/, '') == 'ThisIsTheToken'
         end
 
-      subject.send_verification_request(applicant: applicant, session_id: '1234-abcd-efgh')
+      verification_client.send_verification_request(applicant: applicant, session_id: '1234-abcd-efgh')
 
       expect(verification_stub).to have_been_requested
     end
@@ -36,10 +38,10 @@ describe Aamva::VerificationClient do
         auth_client = instance_double(Aamva::AuthenticationClient)
         allow(auth_client).to receive(:fetch_token).and_return('ThisIsTheToken')
         allow(Aamva::AuthenticationClient).to receive(:new).and_return(auth_client)
-        stub_request(:post, Aamva::Request::VerificationRequest.verification_url).
+        stub_request(:post, example_config.verification_url).
           to_return(body: Fixtures.verification_response, status: 200)
 
-        response = subject.send_verification_request(
+        response = verification_client.send_verification_request(
           applicant: applicant,
           session_id: '1234-abcd-efgh'
         )
@@ -55,14 +57,14 @@ describe Aamva::VerificationClient do
         allow(auth_client).to receive(:fetch_token).and_return('ThisIsTheToken')
         allow(Aamva::AuthenticationClient).to receive(:new).and_return(auth_client)
 
-        stub_request(:post, Aamva::Request::VerificationRequest.verification_url).
+        stub_request(:post, example_config.verification_url).
           to_return(status: 200, body: modify_xml_at_xpath(
             Fixtures.verification_response,
             '//PersonBirthDateMatchIndicator',
             'false'
           ))
 
-        response = subject.send_verification_request(
+        response = verification_client.send_verification_request(
           applicant: applicant,
           session_id: '1234-abcd-efgh'
         )

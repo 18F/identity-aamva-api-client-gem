@@ -20,7 +20,8 @@ describe Aamva::Request::VerificationRequest do
     described_class.new(
       applicant: applicant,
       session_id: transaction_id,
-      auth_token: auth_token
+      auth_token: auth_token,
+      config: example_config,
     )
   end
 
@@ -50,16 +51,14 @@ describe Aamva::Request::VerificationRequest do
 
   describe '#url' do
     it 'should be the AAMVA verification url from the params' do
-      expect(subject.url).to eq(
-        Aamva::Request::VerificationRequest.verification_url
-      )
+      expect(subject.url).to eq(example_config.verification_url)
     end
   end
 
   describe '#send' do
     context 'when the request is successful' do
       it 'returns a response object' do
-        stub_request(:post, Aamva::Request::VerificationRequest.verification_url).
+        stub_request(:post, example_config.verification_url).
           to_return(body: Fixtures.verification_response, status: 200)
 
         result = subject.send
@@ -70,7 +69,7 @@ describe Aamva::Request::VerificationRequest do
 
     context 'when the request times out once' do
       it 'retries and tries again' do
-        stub_request(:post, Aamva::Request::VerificationRequest.verification_url).
+        stub_request(:post, example_config.verification_url).
           to_timeout.
           to_return(body: Fixtures.verification_response, status: 200)
 
@@ -82,7 +81,7 @@ describe Aamva::Request::VerificationRequest do
 
     context 'when the request times out a second time' do
       it 'raises an error' do
-        stub_request(:post, Aamva::Request::VerificationRequest.verification_url).
+        stub_request(:post, example_config.verification_url).
           to_timeout
 
         expect { subject.send }.to raise_error(
@@ -94,7 +93,7 @@ describe Aamva::Request::VerificationRequest do
 
     context 'when the connection fails' do
       it 'raises an error' do
-        stub_request(:post, Aamva::Request::VerificationRequest.verification_url).
+        stub_request(:post, example_config.verification_url).
           to_raise(Faraday::ConnectionFailed.new('error'))
 
         expect { subject.send }.to raise_error(

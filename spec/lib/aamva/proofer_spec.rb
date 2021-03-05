@@ -29,18 +29,26 @@ describe Aamva::Proofer do
   let(:result) { Proofer::Result.new }
 
   subject do
-    described_class.new
+    described_class.new(
+      auth_request_timeout: example_config.auth_request_timeout,
+      auth_url: example_config.auth_url,
+      cert_enabled: example_config.cert_enabled,
+      private_key: example_config.private_key,
+      public_key: example_config.public_key,
+      verification_request_timeout: example_config.verification_request_timeout,
+      verification_url: example_config.verification_url,
+    )
   end
 
   let(:verification_response) { Fixtures.verification_response }
 
   before do
-    stub_request(:post, ENV['AAMVA_AUTH_URL']).
+    stub_request(:post, example_config.auth_url).
       to_return(
         { body: Fixtures.security_token_response },
         { body: Fixtures.authentication_token_response },
       )
-    stub_request(:post, ENV['AAMVA_VERIFICATION_URL']).
+    stub_request(:post, example_config.verification_url).
       to_return(body: verification_response)
   end
 

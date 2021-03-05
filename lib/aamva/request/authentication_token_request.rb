@@ -15,10 +15,11 @@ module Aamva
       SOAP_ACTION =
         '"http://aamva.org/authentication/3.1.0/IAuthenticationService/Authenticate"'.freeze
 
-      attr_reader :body, :headers, :url
+      attr_reader :config, :body, :headers, :url
       attr_reader :security_context_token_identifier, :security_context_token_reference
 
       def initialize(
+        config:,
         security_context_token_identifier:,
         security_context_token_reference:,
         client_hmac_secret:,
@@ -27,7 +28,8 @@ module Aamva
         self.security_context_token_identifier = security_context_token_identifier
         self.security_context_token_reference = security_context_token_reference
         self.hmac_secret = HmacSecret.new(client_hmac_secret, server_hmac_secret).psha1
-        @url = AuthenticationTokenRequest.auth_url
+        @config = config
+        @url = auth_url
         @body = build_request_body
         @headers = build_request_headers
       end
@@ -43,8 +45,8 @@ module Aamva
         raise ::Proofer::TimeoutError, message
       end
 
-      def self.auth_url
-        Env.fetch('AAMVA_AUTH_URL', DEFAULT_AUTH_URL)
+      def auth_url
+        config.auth_url || DEFAULT_AUTH_URL
       end
 
       private

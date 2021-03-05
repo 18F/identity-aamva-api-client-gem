@@ -6,6 +6,7 @@ describe Aamva::Request::AuthenticationTokenRequest do
 
   subject do
     described_class.new(
+      config: example_config,
       security_context_token_identifier: security_context_token_identifier,
       security_context_token_reference: security_context_token_reference,
       client_hmac_secret: client_hmac_secret,
@@ -48,7 +49,7 @@ describe Aamva::Request::AuthenticationTokenRequest do
   describe '#send' do
     context 'when the request is successful' do
       it 'returns a response object' do
-        stub_request(:post, Aamva::Request::AuthenticationTokenRequest.auth_url).
+        stub_request(:post, example_config.auth_url).
           to_return(body: Fixtures.authentication_token_response, status: 200)
 
         result = subject.send
@@ -59,7 +60,7 @@ describe Aamva::Request::AuthenticationTokenRequest do
 
     context 'when the request times out once' do
       it 'retries and tries again' do
-        stub_request(:post, Aamva::Request::AuthenticationTokenRequest.auth_url).
+        stub_request(:post, example_config.auth_url).
           to_timeout.
           to_return(body: Fixtures.authentication_token_response, status: 200)
 
@@ -71,7 +72,7 @@ describe Aamva::Request::AuthenticationTokenRequest do
 
     context 'when the request times out a second time' do
       it 'raises an error' do
-        stub_request(:post, Aamva::Request::AuthenticationTokenRequest.auth_url).
+        stub_request(:post, example_config.auth_url).
           to_timeout
 
         expect { subject.send }.to raise_error(
@@ -83,7 +84,7 @@ describe Aamva::Request::AuthenticationTokenRequest do
 
     context 'when the connection fails' do
       it 'raises an error' do
-        stub_request(:post, Aamva::Request::AuthenticationTokenRequest.auth_url).
+        stub_request(:post, example_config.auth_url).
           to_raise(Faraday::ConnectionFailed.new('error'))
 
         expect { subject.send }.to raise_error(
