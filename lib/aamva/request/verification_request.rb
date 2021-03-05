@@ -15,13 +15,14 @@ module Aamva
 
       extend Forwardable
 
-      attr_reader :body, :headers, :url
+      attr_reader :config, :body, :headers, :url
 
-      def initialize(applicant:, session_id:, auth_token:)
+      def initialize(config:, applicant:, session_id:, auth_token:)
+        @config = config
         @applicant = applicant
         @transaction_id = session_id
         @auth_token = auth_token
-        @url = VerificationRequest.verification_url
+        @url = verification_url
         @body = build_request_body
         @headers = build_request_headers
       end
@@ -37,8 +38,8 @@ module Aamva
         raise ::Proofer::TimeoutError, message
       end
 
-      def self.verification_url
-        Env.fetch('AAMVA_VERIFICATION_URL', DEFAULT_VERIFICATION_URL)
+      def verification_url
+        config.verification_url || DEFAULT_VERIFICATION_URL
       end
 
       private
@@ -85,7 +86,7 @@ module Aamva
       end
 
       def message_destination_id
-        return 'P6' if Env.fetch('AAMVA_CERT_ENABLED') == 'true'
+        return 'P6' if config.cert_enabled.to_s == 'true'
         applicant.state_id_data.state_id_jurisdiction
       end
 
@@ -120,7 +121,7 @@ module Aamva
       end
 
       def timeout
-        ENV.fetch('AAMVA_VERIFICATION_REQUEST_TIMEOUT', 5).to_i
+        (config.verification_request_timeout || 5).to_i
       end
     end
   end

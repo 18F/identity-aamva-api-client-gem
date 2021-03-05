@@ -14,10 +14,11 @@ module Aamva
       SOAP_ACTION =
         '"http://aamva.org/authentication/3.1.0/IAuthenticationService/Authenticate"'.freeze
 
-      attr_reader :body, :headers, :url
+      attr_reader :config, :body, :headers, :url
 
-      def initialize
-        @url = SecurityTokenRequest.auth_url
+      def initialize(config)
+        @config = config
+        @url = auth_url
         @body = build_request_body
         @headers = build_request_headers
       end
@@ -37,8 +38,8 @@ module Aamva
         raise ::Proofer::TimeoutError, message
       end
 
-      def self.auth_url
-        Env.fetch('AAMVA_AUTH_URL', DEFAULT_AUTH_URL)
+      def auth_url
+        config.auth_url || DEFAULT_AUTH_URL
       end
 
       private
@@ -94,13 +95,13 @@ module Aamva
 
       def private_key
         @private_key ||= OpenSSL::PKey::RSA.new(
-          Base64.decode64(Env.fetch('AAMVA_PRIVATE_KEY'))
+          Base64.decode64(config.private_key)
         )
       end
 
       def public_key
         @public_key ||= OpenSSL::X509::Certificate.new(
-          Base64.decode64(Env.fetch('AAMVA_PUBLIC_KEY'))
+          Base64.decode64(config.public_key)
         )
       end
 
@@ -121,7 +122,7 @@ module Aamva
       end
 
       def timeout
-        ENV.fetch('AAMVA_AUTH_REQUEST_TIMEOUT', 5).to_i
+        (config.auth_request_timeout || 5).to_i
       end
     end
   end

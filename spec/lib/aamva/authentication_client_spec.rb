@@ -1,12 +1,12 @@
 describe Aamva::AuthenticationClient do
   let(:current_time) { Time.utc(2017) }
   let(:security_token_request_stub) do
-    stub_request(:post, Aamva::Request::SecurityTokenRequest.auth_url).
+    stub_request(:post, example_config.auth_url).
       with(body: Fixtures.security_token_request).
       to_return(body: Fixtures.security_token_response, status: 200)
   end
   let(:auth_token_request_stub) do
-    stub_request(:post, Aamva::Request::AuthenticationTokenRequest.auth_url).
+    stub_request(:post, example_config.auth_url).
       with(body: Fixtures.authentication_token_request).
       to_return(body: Fixtures.authentication_token_response, status: 200)
   end
@@ -18,7 +18,7 @@ describe Aamva::AuthenticationClient do
 
   describe '#fetch_token' do
     before do
-      security_token_request = Aamva::Request::SecurityTokenRequest.new
+      security_token_request = Aamva::Request::SecurityTokenRequest.new(example_config)
       allow(security_token_request).to receive(:body).and_return(Fixtures.security_token_request)
       allow(security_token_request).to receive(:nonce).and_return(client_hmac_secret)
       allow(Aamva::Request::SecurityTokenRequest).to receive(:new).
@@ -29,11 +29,13 @@ describe Aamva::AuthenticationClient do
         security_context_token_identifier: security_context_token_identifier,
         security_context_token_reference: security_context_token_reference,
         client_hmac_secret: client_hmac_secret,
-        server_hmac_secret: server_hmac_secret
+        server_hmac_secret: server_hmac_secret,
+        config: example_config,
       )
       allow(auth_token_request).to receive(:body).and_return(Fixtures.authentication_token_request)
       allow(Aamva::Request::AuthenticationTokenRequest).to receive(:new).
         with(
+          config: example_config,
           security_context_token_identifier: security_context_token_identifier,
           security_context_token_reference: security_context_token_reference,
           client_hmac_secret: client_hmac_secret,
@@ -52,7 +54,7 @@ describe Aamva::AuthenticationClient do
       end
 
       it 'should send an authentication request then save and return the token' do
-        token = subject.fetch_token
+        token = subject.fetch_token(example_config)
 
         expect(token).to eq('KEYKEYKEY')
         expect(Aamva::AuthenticationClient.auth_token).to eq('KEYKEYKEY')
@@ -71,7 +73,7 @@ describe Aamva::AuthenticationClient do
       end
 
       it 'should return the auth token' do
-        token = subject.fetch_token
+        token = subject.fetch_token(example_config)
 
         expect(token).to eq('THEOTHERKEY')
         expect(Aamva::AuthenticationClient.auth_token).to eq('THEOTHERKEY')
@@ -90,7 +92,7 @@ describe Aamva::AuthenticationClient do
       end
 
       it 'should send an authentication request then save and return the token' do
-        token = subject.fetch_token
+        token = subject.fetch_token(example_config)
 
         expect(token).to eq('KEYKEYKEY')
         expect(Aamva::AuthenticationClient.auth_token).to eq('KEYKEYKEY')
@@ -105,7 +107,7 @@ describe Aamva::AuthenticationClient do
     it 'should use the token mutex' do
       expect(Aamva::AuthenticationClient.token_mutex).to receive(:synchronize)
 
-      subject.fetch_token
+      subject.fetch_token(example_config)
     end
   end
 end

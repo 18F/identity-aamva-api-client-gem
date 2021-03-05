@@ -2,6 +2,23 @@ require 'ostruct'
 
 module Aamva
   class Proofer < Proofer::Base
+    Config = Struct.new(
+      :auth_request_timeout,
+      :auth_url,
+      :cert_enabled,
+      :private_key,
+      :public_key,
+      :verification_request_timeout,
+      :verification_url,
+      keyword_init: true,
+    )
+
+    attr_reader :config
+
+    def initialize(**attrs)
+      @config = Config.new(**attrs)
+    end
+
     vendor_name 'aamva:state_id'
 
     required_attributes :uuid,
@@ -18,7 +35,7 @@ module Aamva
 
     def aamva_proof(applicant, result)
       aamva_applicant = Aamva::Applicant.from_proofer_applicant(OpenStruct.new(applicant))
-      response = Aamva::VerificationClient.new.send_verification_request(applicant: aamva_applicant)
+      response = Aamva::VerificationClient.new(config).send_verification_request(applicant: aamva_applicant)
       result.transaction_id = response.transaction_locator_id
       unless response.success?
         response.verification_results.each do |attribute, v_result|

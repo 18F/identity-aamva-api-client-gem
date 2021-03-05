@@ -15,8 +15,14 @@ applicant = Proofer::Applicant.new(
   zipcode: '70808'
 )
 
-agent = Proofer::Agent.new(vendor: :aamva, applicant: applicant)
-response = agent.submit_state_id(
+proofer = Aamva::Proofer.new(
+  private_key: 'base64privatekey',
+  public_key: 'base64publickey',
+  verification_url: 'https://verificationservices-primary.aamva.org:18449/dldv/2.1/valuefree',
+  auth_url: 'https://authentication-cert.aamva.org/Authentication/Authenticate.svc'
+)
+
+response = proofer.submit_state_id(
   state_id_number: '123456789',
   state_id_jurisdiction: 'LA'
 )
@@ -47,13 +53,3 @@ To run the integration tests:
 - Set 'AAMVA_CERT_ENABLED' if you are using test data for the AAMVA cert environment
 - Run `rspec spec/integration/`
 
-# Environment variables
-
-This application uses the following environment variables:
-
-```shell
-AAMVA_PRIVATE_KEY='base64privatekey'
-AAMVA_PUBLIC_KEY='base64publickey'
-AAMVA_VERIFICATION_URL='https://verificationservices-primary.aamva.org:18449/dldv/2.1/valuefree'
-AAMVA_AUTH_URL= 'https://authentication-cert.aamva.org/Authentication/Authenticate.svc'
-```
