@@ -8,8 +8,6 @@ require 'retries'
 require 'proofer'
 require 'aamva'
 
-
-
 Dir[File.dirname(__FILE__) + '/support/*.rb'].sort.each { |file| require file }
 
 Retries.sleep_enabled = false
