@@ -4,9 +4,13 @@ describe Aamva::Request::AuthenticationTokenRequest do
   let(:client_hmac_secret) { 'MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA=' }
   let(:server_hmac_secret) { 'MTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTE=' }
 
+  let(:config) do
+    example_config
+  end
+
   subject do
     described_class.new(
-      config: example_config,
+      config: config,
       security_context_token_identifier: security_context_token_identifier,
       security_context_token_reference: security_context_token_reference,
       client_hmac_secret: client_hmac_secret,
@@ -92,6 +96,18 @@ describe Aamva::Request::AuthenticationTokenRequest do
           'AAMVA raised Faraday::ConnectionFailed waiting for authentication token response: error',
         )
       end
+    end
+  end
+
+  describe '#timeout' do
+    let(:config) do
+      super().tap do |config|
+        config.auth_request_timeout = 100
+      end
+    end
+
+    it 'reads from the config object' do
+      expect(subject.instance_eval { timeout }).to eq(100)
     end
   end
 end

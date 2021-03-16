@@ -2,19 +2,20 @@
 $LOAD_PATH.unshift File.dirname(__FILE__) + '/../lib'
 
 require 'pry-byebug'
-require 'dotenv'
 require 'webmock/rspec'
 require 'retries'
 
 require 'proofer'
 require 'aamva'
 
+
+
 Dir[File.dirname(__FILE__) + '/support/*.rb'].sort.each { |file| require file }
 
 Retries.sleep_enabled = false
 
 def example_config
-  @config ||= Aamva::Proofer::Config.new(
+  Aamva::Proofer::Config.new(
     cert_enabled: 'false',
     private_key: Base64.strict_encode64(Fixtures.aamva_private_key.to_der),
     public_key: Base64.strict_encode64(Fixtures.aamva_public_key.to_der),
