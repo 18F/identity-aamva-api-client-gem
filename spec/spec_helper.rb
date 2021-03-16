@@ -5,7 +5,6 @@ require 'pry-byebug'
 require 'webmock/rspec'
 require 'retries'
 
-require 'proofer'
 require 'aamva'
 
 Dir[File.dirname(__FILE__) + '/support/*.rb'].sort.each { |file| require file }

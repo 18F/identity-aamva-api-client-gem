@@ -1,4 +1,5 @@
 require 'ostruct'
+require 'proofer'
 
 module Aamva
   class Proofer < Proofer::Base
