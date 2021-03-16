@@ -27,7 +27,6 @@ Gem::Specification.new do |s|
   s.require_paths = ['lib']
   s.rdoc_options = ['--charset=UTF-8']
 
-  s.add_dependency('dotenv')
   s.add_dependency('faraday')
   s.add_dependency('hashie')
   s.add_dependency('retries')

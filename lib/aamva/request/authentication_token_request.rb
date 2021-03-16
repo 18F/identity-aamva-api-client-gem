@@ -104,7 +104,7 @@ module Aamva
       end
 
       def timeout
-        ENV.fetch('AAMVA_AUTH_REQUEST_TIMEOUT', 5).to_i
+        (config.auth_request_timeout || 5).to_i
       end
     end
   end
