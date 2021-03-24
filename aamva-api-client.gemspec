@@ -31,6 +31,7 @@ Gem::Specification.new do |s|
   s.add_dependency('hashie')
   s.add_dependency('retries')
   s.add_dependency('xmldsig')
+  s.add_dependency('redacted_struct', '>= 1.0.0')
 
   # This should be identity-proofer when we rename what the gem exports itself as
   s.add_dependency('proofer', '>= 2.7.1')
