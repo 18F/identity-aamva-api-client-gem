@@ -1,9 +1,10 @@
 require 'ostruct'
 require 'proofer'
+require 'redacted_struct'
 
 module Aamva
   class Proofer < Proofer::Base
-    Config = Struct.new(
+    Config = RedactedStruct.new(
       :auth_request_timeout,
       :auth_url,
       :cert_enabled,
@@ -12,6 +13,13 @@ module Aamva
       :verification_request_timeout,
       :verification_url,
       keyword_init: true,
+      allowed_members: [
+        :auth_request_timeout,
+        :auth_url,
+        :cert_enabled,
+        :verification_request_timeout,
+        :verification_url,
+      ],
     )
 
     attr_reader :config
